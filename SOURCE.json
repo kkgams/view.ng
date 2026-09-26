@@ -5,7 +5,7 @@
   "source_worktree_status": [],
   "repository": "view.ng",
   "files_sha256": {
-    ".github/workflows/verify.yml": "f4f1f1920aa0ec16710e8cc5c6b196ff69cbe5d0fcb4bdf8c8566e949831178f",
+    ".github/workflows/verify.yml": "b737a9f83062bdb3437455e7abab0362ee806c4663fe80af564ea77a353765b3",
     "CONTEXT.md": "4a6a02ab2a6fd024493d2be8c596733dfb313dadde77f1ae5564877738b17fb7",
     "LICENSING.md": "0bddd694c9d8b704519bf4b02a97cb8e0896867f1e102c3b6849c9088eb1f830",
     "README.md": "1067156ae583d69244d1b7be87b8073b6d565d9efab203f6b38c8cadacb04944",
