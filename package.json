@@ -1,0 +1,15 @@
+{
+  "name": "view.ng",
+  "version": "0.0.0-private",
+  "private": true,
+  "type": "module",
+  "files": [
+    "src/views/view-ng.js"
+  ],
+  "scripts": {
+    "test": "node scripts/verify.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
