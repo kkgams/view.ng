@@ -1,2 +1,5 @@
 dist/
 __pycache__/
+/build/
+/tools/
+/gams_modules/

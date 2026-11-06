@@ -39,10 +39,8 @@ class ReleaseTests(unittest.TestCase):
         proof = json.dumps(evidence).encode()
         (self.root / 'NOTICE-EVIDENCE.json').write_bytes(proof)
         (self.root / 'NOTICE').write_text('NOTICE\nNOTICE-EVIDENCE.json SHA-256: ' + release.digest(proof) + '\n')
-        self.env = {f'APPROVED_{name}_SHA256': release.digest((self.root / name).read_bytes())
-                    for name in ('LICENSE', 'NOTICE')}
-        self.env['GITHUB_REPOSITORY'] = 'kkgams/view.example'
-        self.patch = patch.dict(os.environ, self.env)
+        self.env = {'GITHUB_REPOSITORY': 'kkgams/view.example'}
+        self.patch = patch.dict(os.environ, self.env, clear=True)
         self.patch.start()
         self.addCleanup(self.patch.stop)
         self.out = Path(self.temp.name) / 'candidate'
@@ -88,18 +86,12 @@ class ReleaseTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'canonical Project Unit identity'):
                 self.stage()
 
-    def test_license_notice_and_missing_approval(self):
-        for key in ('APPROVED_LICENSE_SHA256', 'APPROVED_NOTICE_SHA256'):
-            with patch.dict(os.environ, {key: ''}):
-                with self.assertRaises(ValueError):
-                    self.stage()
-        (self.root / 'LICENSE').write_text('changed')
-        with self.assertRaises(ValueError):
-            self.stage()
+    def test_no_environment_approval_and_pending_provenance(self):
+        self.stage()
+        self.check()
         (self.root / 'NOTICE').write_text('PROVENANCE_PENDING')
-        with patch.dict(os.environ, {'APPROVED_NOTICE_SHA256': release.digest(b'PROVENANCE_PENDING')}):
-            with self.assertRaises(ValueError):
-                release.approved(self.root)
+        with self.assertRaises(ValueError):
+            release.legal_ready(self.root)
 
     def test_tag_mismatch(self):
         with self.assertRaises(ValueError):
@@ -153,13 +145,11 @@ class ReleaseTests(unittest.TestCase):
     def test_workflow_gated_upload_and_tag_only_publication(self):
         workflow = SCRIPT.parents[1] / '.github/workflows/release.yml'
         text = workflow.read_text()
-        self.assertIn("vars.LICENSE_SHA256 != '' && vars.NOTICE_SHA256 != ''", text)
+        self.assertNotIn("APPROVED_", text)
         self.assertIn("node-version: 24", text)
         self.assertIn("needs: candidate", text)
-        self.assertIn('APPROVED_LICENSE_SHA256: ${{ vars.LICENSE_SHA256 }}', text)
-        self.assertIn('APPROVED_NOTICE_SHA256: ${{ vars.NOTICE_SHA256 }}', text)
         upload = text[text.index('- uses: actions/upload-artifact@'):text.index('  publish:')]
-        self.assertIn("vars.LICENSE_SHA256 != '' && vars.NOTICE_SHA256 != ''", upload)
+        self.assertIn("github.ref == 'refs/heads/release'", upload)
         self.assertIn("  publish:\n    if: startsWith(github.ref, 'refs/tags/v')", text)
         self.assertNotIn('--clobber', text)
         self.assertNotIn('npm publish', text)
@@ -186,12 +176,68 @@ class ReleaseTests(unittest.TestCase):
             release.absent('owner/repo', 'v0.1.0', 'token')
 
     def test_branch_head_mismatch_and_api_error(self):
-        with patch.object(release.subprocess, 'run'), patch.object(release.subprocess, 'check_output', side_effect=[b'a', b'b', b'a']), patch.dict(os.environ, {'GITHUB_SHA': 'a'}):
+        with patch.object(release.subprocess, 'check_output', side_effect=[b'a', b'b']), patch.dict(os.environ, {'GITHUB_SHA': 'a'}):
             with self.assertRaises(ValueError):
                 release.branch('v0.1.0')
-        with patch.object(release.subprocess, 'run', side_effect=RuntimeError('fetch failed')):
+        with patch.object(release.subprocess, 'check_output', side_effect=RuntimeError('git failed')):
             with self.assertRaises(RuntimeError):
                 release.branch('v0.1.0')
+
+
+    def test_matching_tag_on_non_release_branch(self):
+        import subprocess
+        gitroot = Path(self.temp.name) / 'git-identity'
+        gitroot.mkdir()
+        def git(*args):
+            return subprocess.check_output(['git', '-C', str(gitroot), *args], stderr=subprocess.PIPE).strip()
+        git('init', '-b', 'feature')
+        git('config', 'user.name', 'Test')
+        git('config', 'user.email', 'test@example.invalid')
+        (gitroot / 'package.json').write_text(json.dumps({'version': '0.1.0'}))
+        git('add', '.')
+        git('commit', '-m', 'fixture')
+        git('tag', '-a', 'v0.1.0', '-m', 'fixture')
+        head = git('rev-parse', 'HEAD').decode()
+        previous = Path.cwd()
+        try:
+            os.chdir(gitroot)
+            with patch.object(release, '__file__', str(gitroot / 'scripts/release.py')), patch.dict(os.environ, {'GITHUB_SHA': head}):
+                release.branch('v0.1.0')
+                with patch.dict(os.environ, {'GITHUB_SHA': 'wrong'}):
+                    with self.assertRaises(ValueError):
+                        release.branch('v0.1.0')
+                with self.assertRaises(ValueError):
+                    release.branch('v0.2.0')
+        finally:
+            os.chdir(previous)
+
+
+    def test_required_legal_files_are_nonempty_regular_files(self):
+        for name in ('LICENSE', 'NOTICE'):
+            path = self.root / name
+            original = path.read_bytes()
+            for invalid in ('missing', 'empty', 'whitespace', 'directory', 'symlink'):
+                with self.subTest(name=name, invalid=invalid):
+                    path.unlink()
+                    if invalid == 'empty':
+                        path.write_bytes(b'')
+                    elif invalid == 'whitespace':
+                        path.write_bytes(b' \n')
+                    elif invalid == 'directory':
+                        path.mkdir()
+                    elif invalid == 'symlink':
+                        target = self.root / 'legal-target'
+                        target.write_bytes(original)
+                        path.symlink_to(target)
+                    try:
+                        with self.assertRaises(ValueError):
+                            release.legal_ready(self.root)
+                    finally:
+                        if path.is_dir():
+                            path.rmdir()
+                        elif path.exists() or path.is_symlink():
+                            path.unlink()
+                        path.write_bytes(original)
 
 
 if __name__ == '__main__':

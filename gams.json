@@ -1,0 +1,192 @@
+{
+  "plugins": [
+    "https://github.com/kkgams/plugin.fs/releases/download/v0.2.0/plugin.fs.wasm",
+    "https://github.com/kkgams/plugin.layout/releases/download/v0.2.0/plugin.layout.wasm",
+    "https://github.com/kkgams/plugin.lua/releases/download/v0.2.0/plugin.lua.wasm"
+  ],
+  "ui": {
+    "keys": [],
+    "theme": {
+      "url": "https://github.com/kkgams/theme.the98/releases/download/v0.2.6/theme.the98-0.2.6.zip#themes/the98.css"
+    },
+    "services": {
+      "ui-context": {
+        "url": "https://github.com/kkgams/ui-service.context/releases/download/v0.2.0/ui-service.context-0.2.0.zip#ui-plugins/context.js"
+      },
+      "ui-keys": {
+        "url": "https://github.com/kkgams/ui-service.keys/releases/download/v0.2.0/ui-service.keys-0.2.0.zip#ui-plugins/keys.js"
+      },
+      "ui-toast": {
+        "url": "https://github.com/kkgams/ui-service.toast/releases/download/v0.2.0/ui-service.toast-0.2.0.zip#ui-plugins/toast.js"
+      },
+      "ui-popup": {
+        "url": "https://github.com/kkgams/ui-service.popup/releases/download/v0.2.0/ui-service.popup-0.2.0.zip#ui-plugins/popup.js"
+      },
+      "ui-tooltip": {
+        "url": "https://github.com/kkgams/ui-service.tooltip/releases/download/v0.2.0/ui-service.tooltip-0.2.0.zip#ui-plugins/tooltip.js"
+      },
+      "ui-layout": {
+        "url": "https://github.com/kkgams/ui-service.layout/releases/download/v0.2.0/ui-service.layout-0.2.0.zip#ui-plugins/layout.js",
+        "config": {
+          "layout": "<view-ng />"
+        }
+      }
+    },
+    "views": {
+      "view-files": {
+        "url": "https://github.com/kkgams/view.files/releases/download/v1.0.0/view.files-1.0.0.zip#views/view-files.js",
+        "label": "Files",
+        "group": "Project",
+        "internal": false,
+        "config": {
+          "open": {
+            "default": "files-default"
+          }
+        }
+      },
+      "files-rename": {
+        "url": "https://github.com/kkgams/view.files/releases/download/v1.0.0/view.files-1.0.0.zip#views/files-rename.js",
+        "label": "Rename File",
+        "internal": true
+      },
+      "files-default": {
+        "url": "https://github.com/kkgams/view.files/releases/download/v1.0.0/view.files-1.0.0.zip#views/files-default.js",
+        "label": "File Info",
+        "internal": true
+      },
+      "view-code": {
+        "url": "https://github.com/kkgams/view.code/releases/download/v0.1.0/view.code-0.1.0.zip#views/view-code.js",
+        "label": "Code",
+        "internal": false
+      },
+      "view-ng-node": {
+        "url": "https://github.com/kkgams/view.ng-node/releases/download/v0.1.0/view.ng-node-0.1.0.zip#views/view-ng-node.js",
+        "label": "Node editor",
+        "internal": true,
+        "config": {
+          "presets": []
+        }
+      },
+      "view-ng": {
+        "url": "src/views/view-ng.js",
+        "label": "Node graph",
+        "group": "Project",
+        "internal": false,
+        "config": {
+          "background": [
+            0.043137254901960784,
+            0.09803921568627451,
+            0.13333333333333333,
+            1
+          ],
+          "renderer": {
+            "node": {
+              "width": 180,
+              "headerHeight": 30,
+              "portRowHeight": 28,
+              "padding": 12,
+              "radius": 8,
+              "borderWidth": 2,
+              "portRadius": 6
+            },
+            "edge": {
+              "width": 2,
+              "selectedWidth": 4,
+              "curveOffset": 48
+            },
+            "text": {
+              "font": "sans-serif",
+              "size": 13
+            },
+            "theme": {
+              "node": [
+                0.0980392157,
+                0.1803921569,
+                0.231372549,
+                1
+              ],
+              "nodeHover": [
+                0.1333333333,
+                0.2509803922,
+                0.3215686275,
+                1
+              ],
+              "nodeSelected": [
+                0.1137254902,
+                0.3058823529,
+                0.4,
+                1
+              ],
+              "nodeBorder": [
+                0.2745098039,
+                0.4235294118,
+                0.5176470588,
+                1
+              ],
+              "header": [
+                0.1647058824,
+                0.3137254902,
+                0.3960784314,
+                1
+              ],
+              "requiredHeader": [
+                0.2235294118,
+                0.4117647059,
+                0.5333333333,
+                1
+              ],
+              "text": [
+                0.8392156863,
+                0.9254901961,
+                0.9725490196,
+                1
+              ],
+              "textMuted": [
+                0.5647058824,
+                0.6823529412,
+                0.7529411765,
+                1
+              ],
+              "port": [
+                0.1725490196,
+                0.7882352941,
+                0.6666666667,
+                1
+              ],
+              "portHover": [
+                0.2901960784,
+                0.7803921569,
+                1,
+                1
+              ],
+              "edge": [
+                0.2745098039,
+                0.4235294118,
+                0.5176470588,
+                0.95
+              ],
+              "edgeSelected": [
+                0.2901960784,
+                0.7803921569,
+                1,
+                1
+              ],
+              "edgePreviewInvalid": [
+                0.9215686275,
+                0.3254901961,
+                0.3254901961,
+                1
+              ]
+            }
+          },
+          "layout": {
+            "gridOriginX": 80,
+            "gridOriginY": 58,
+            "gridStepX": 240,
+            "gridStepY": 112
+          }
+        }
+      }
+    }
+  }
+}
