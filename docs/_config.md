@@ -1,5 +1,5 @@
 ---
-title: view.ng
-description: Local development and documentation.
+title: Node Graph View
+description: Node graph editing and local development for GAMS.
 home: index
 ---
