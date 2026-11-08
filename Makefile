@@ -16,17 +16,19 @@ WIKI_REPOSITORY := https://github.com/justgook/wiki
 WIKI_MAKEFILE := build.nosync/wiki-$(WIKI_VERSION).mk
 WIKI_ENGINE := $(abspath build.nosync/wiki-$(WIKI_VERSION))
 
-.PHONY: open test docs serve-docs validate-docs package clean
+.PHONY: open test tests docs serve-docs validate-docs package clean
 
 build.nosync/views/view-ng.js: src/views/view-ng.js src/views/ng-document.js src/lua/compile-graph.lua scripts/bundle.py
 	$(PYTHON) -B scripts/bundle.py
 
 test: build.nosync/views/view-ng.js
-	$(NODE) --check build.nosync/views/view-ng.js
-	@for source in src/views/*.js; do $(NODE) --check "$$source" || exit; done
+	$(NODE) --input-type=module --check < build.nosync/views/view-ng.js
+	@for source in src/views/*.js; do $(NODE) --input-type=module --check < "$$source" || exit; done
 	LUA="$(LUA)" $(NODE) --test test/*.test.mjs
 	$(LUA) test/lua/graph_test.lua
 	$(PYTHON) -c 'import json,pathlib; c=json.loads(pathlib.Path("gams.json").read_text()); assert all(pathlib.Path(v["url"]).is_file() for v in c["ui"]["views"].values() if not v["url"].startswith("https://"))'
+
+tests: test
 
 # Retain an existing app; never update it implicitly.
 tools/gams.app: | build.nosync/tmp
@@ -51,7 +53,7 @@ gams_modules/plugin.lua.wasm:
 	@echo "Install the prepared plugin.lua WASM at $@; released v0.2.0 lacks the required entry/import API." >&2
 	@exit 1
 
-open: test gams_modules/plugin.lua.wasm tools/gams.app
+open: build.nosync/views/view-ng.js gams_modules/plugin.lua.wasm tools/gams.app
 	GAMS_APP_CWD="$(CURDIR)" GAMS_CONFIG="gams.json" ./tools/gams.app/Contents/MacOS/gams
 
 build.nosync/tmp:

@@ -35,9 +35,9 @@ The new Lua entry/import API is not available in the old released `plugin.lua` v
 
 | Command | Purpose |
 | --- | --- |
-| `make open` | Build/check source and launch local `gams.json`; require the prepared Lua component and download the Host only if absent (macOS Apple Silicon) |
+| `make open` | Build the View without tests and launch local `gams.json`; require the prepared Lua component and download the Host only if absent (macOS Apple Silicon) |
 | `make tools/gams.app` | Download the released Host with its notices, without launching it |
-| `make test` | JavaScript syntax, document path/serialization tests, native Lua graph tests and local View entry checks |
+| `make test` / `make tests` | JavaScript syntax, document path/serialization tests, native Lua graph tests and local View entry checks |
 | `make package` | Incremental `build.nosync/view.ng.zip` and `SHA256SUMS` |
 | `make serve-docs` | Preview pinned wiki; independent `DOCS_PORT` defaults to 8080 |
 | `make docs` / `make validate-docs` | Build / validate documentation |

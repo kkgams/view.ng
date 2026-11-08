@@ -1,25 +1,25 @@
 // File documents use module-relative paths; the editor uses Project-relative paths.
-function assert(condition, message) {
+function assertDocument(condition, message) {
     if (!condition) throw new Error(message)
 }
 
 export function projectPath(path) {
-    assert(typeof path === "string" && path.length > 0, "Graph path is required")
-    assert(!path.startsWith("/") && !/^[A-Za-z]:/.test(path) && !path.includes("\\") && !path.includes("\0"), `Invalid Project path: ${path}`)
+    assertDocument(typeof path === "string" && path.length > 0, "Graph path is required")
+    assertDocument(!path.startsWith("/") && !/^[A-Za-z]:/.test(path) && !path.includes("\\") && !path.includes("\0"), `Invalid Project path: ${path}`)
     const parts = []
     for (const part of path.split("/")) {
         if (!part || part === ".") continue
         if (part === "..") {
-            assert(parts.length > 0, `Path escapes the Project: ${path}`)
+            assertDocument(parts.length > 0, `Path escapes the Project: ${path}`)
             parts.pop()
         } else parts.push(part)
     }
-    assert(parts.length > 0, `Path must identify a file: ${path}`)
+    assertDocument(parts.length > 0, `Path must identify a file: ${path}`)
     return parts.join("/")
 }
 
 export function resolveModulePath(documentPath, dependency) {
-    assert(typeof dependency === "string" && dependency.length > 0 && !dependency.startsWith("/") && !/^[A-Za-z]:/.test(dependency), "Import must be a relative file path")
+    assertDocument(typeof dependency === "string" && dependency.length > 0 && !dependency.startsWith("/") && !/^[A-Za-z]:/.test(dependency), "Import must be a relative file path")
     const directory = projectPath(documentPath).split("/").slice(0, -1)
     return projectPath([...directory, dependency].join("/"))
 }
@@ -34,7 +34,7 @@ export function relativeModulePath(documentPath, dependency) {
 export function mapDocumentPaths(document, documentPath, toRelative) {
     const result = structuredClone(document)
     const nodes = Array.isArray(result) ? result : result.nodes
-    assert(Array.isArray(nodes), "Graph document must contain a node array")
+    assertDocument(Array.isArray(nodes), "Graph document must contain a node array")
     const convert = toRelative ? relativeModulePath : resolveModulePath
     const visit = (level) => {
         for (const node of level) {

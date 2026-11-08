@@ -31,8 +31,8 @@ Make assembles the graph View from its canonical source, document helpers and co
 
 | Command | Purpose |
 | --- | --- |
-| `make open` | Build/check source and open the Project in the released Host |
-| `make test` | Check JavaScript syntax, document paths, native Lua graph behavior and local View paths |
+| `make open` | Build the View without tests and open the Project in the released Host |
+| `make test` / `make tests` | Check JavaScript syntax, document paths, native Lua graph behavior and local View paths |
 | `make package` | Build incremental `build.nosync/view.ng.zip` and checksums |
 | `make serve-docs` | Preview docs, independent `DOCS_PORT=8080` |
 | `make docs` | Build docs under `build.nosync/site/` |
