@@ -9,7 +9,6 @@ import {
     cloneNgNodesWithNewIds,
     createNgNodeGraph,
     findNgGroupPath,
-    flattenNgGraphWithLocations,
     nextNgNodeId,
     normalizeNgGroupPath,
     parseNgGroupGraphDocument,
@@ -37,10 +36,6 @@ function okResult() {
     return { ok: true }
 }
 
-function luaStringLiteral(value) {
-    return JSON.stringify(String(value))
-}
-
 function canvasBackgroundColor(value) {
     assert(Array.isArray(value) && value.length === 4, "view-ng background must contain four numbers")
     value.forEach((channel, index) => assert(typeof channel === "number" && Number.isFinite(channel), `view-ng background[${index}] must be finite`))
@@ -57,6 +52,7 @@ export class ViewNg extends ViewCanvasBase {
         this.renderer = null
         this.rootGraph = []
         this.linkedGraphs = new Map()
+        this.linkedGraphBaselines = new Map()
         this.activeGroupPath = []
         this.graphModel = createNgNodeGraph([])
         this.graph = this.graphModel.graph
@@ -65,7 +61,6 @@ export class ViewNg extends ViewCanvasBase {
         this._suppressDataSourceReload = false
         this.nodePresetConfig = null
         this.currentRunId = ""
-        this.currentExecutionLocations = new Map()
         this.selectedNodeIds = new Set()
         this.selectedNodeId = null
         this.selectedEdgeId = null
@@ -1136,8 +1131,8 @@ export class ViewNg extends ViewCanvasBase {
         if (payload.runId !== this.currentRunId) return okResult()
         const nodeId = Number(payload.nodeId || 0)
         assert(nodeId > 0, `view-ng progress ${method} missing nodeId`)
-        const location = this.currentExecutionLocations.get(nodeId)
-        assert(location, `view-ng progress references missing execution node ${nodeId}`)
+        const location = payload.location
+        assert(location && location.executionNodeId === nodeId, `view-ng progress missing location for execution node ${nodeId}`)
         const visibleNodeId = visibleNgExecutionNodeId(location, this.activeGroupPath)
         const node = visibleNodeId === null ? null : this.graph.nodes.find((candidate) => candidate.id === visibleNodeId)
         if (!node) return okResult()
@@ -1157,15 +1152,12 @@ export class ViewNg extends ViewCanvasBase {
         const runId = crypto.randomUUID()
         this.currentRunId = runId
         this._setStatus("compiling graph run...", "info")
-        const compilerRead = unwrap(await runtime.invoke("fs/fs::read-text", "ng/compile-graph.lua"))
-        const execution = flattenNgGraphWithLocations(this.getGraph(), { resolveLinked: this.linkedResolver() })
-        const graph = execution.nodes
-        this.currentExecutionLocations = execution.locations
-        const progressSource = `local __ng_progress_plugin = ${luaStringLiteral(this.pluginId)}\nlocal __ng_progress_run_id = ${luaStringLiteral(runId)}\nfunction __ng_progress(method, nodeId, message)\n  host.call(__ng_progress_plugin .. "." .. method, { runId = __ng_progress_run_id, nodeId = nodeId, message = message })\nend`
-        const compilerSource = `_G.input = ${luaStringLiteral(JSON.stringify(graph))}\n_G.ngProgressSource = ${luaStringLiteral(progressSource)}\n${compilerRead}`
-        const generatedSource = unwrap(await runtime.invoke("lua/lua::run", compilerSource))
+        assert(this.graphPath, "Save the graph before running it")
+        await this.saveLinkedGraphs()
+        const graph = this.getGraph()
+        const generatedSource = await this.compileDocument(this.graphPath, graph)
         this._setStatus("running generated graph code...", "info")
-        const resultText = unwrap(await runtime.invoke("lua/lua::run", generatedSource))
+        const resultText = await this.invokeLua(generatedSource, "main", [{ pluginId: this.pluginId, runId }], this.graphPath)
         if (this.currentRunId !== runId) return false
         this._setStatus("graph run completed", "success")
         const goalResult = graph.some((node) => node.kind === NG_NODE_KINDS.GOAL) ? `: ${resultText}` : ""
@@ -1192,8 +1184,9 @@ export class ViewNg extends ViewCanvasBase {
         const normalized = normalizeNgGroupPath(path)
         assert(!ancestors.includes(normalized), `view-ng linked Group cycle: ${[...ancestors, normalized].join(" -> ")}`)
         if (target.has(normalized)) return target.get(normalized)
-        const document = parseNgGroupGraphDocument(unwrap(await runtime.invoke("fs/fs::read-text", normalized), normalized))
+        const document = parseNgGroupGraphDocument(await this.readLuaDocument(normalized))
         target.set(normalized, document)
+        this.linkedGraphBaselines.set(normalized, JSON.stringify(document))
         for (const childPath of this.linkedPathsInGraph(document)) await this.loadLinkedGraphFS(childPath, [...ancestors, normalized], target)
         return document
     }
@@ -1228,7 +1221,7 @@ export class ViewNg extends ViewCanvasBase {
     }
 
     async importLinkedGroup() {
-        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Import Linked Group", size: "medium", tag: "view-files", props: { mode: "chooser", filter: "*.ng.json,*.json" } }))
+        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Import Linked Group", size: "medium", tag: "view-files", props: { mode: "chooser", filter: "*.ng.lua" } }))
         if (!payload || payload.cancelled) return false
         const selection = Array.isArray(payload.selection) ? payload.selection[0] : payload.selection
         const path = normalizeNgGroupPath(selection?.path || "")
@@ -1243,7 +1236,7 @@ export class ViewNg extends ViewCanvasBase {
         const raw = this.activeGraph()
         const group = {
             id: this.nextNodeId(), kind: NG_NODE_KINDS.GROUP, x: Math.round(center.x), y: Math.round(center.y),
-            name: path.split("/").pop().replace(/\.ng\.json$/i, "").replace(/\.json$/i, ""),
+            name: path.split("/").pop().replace(/\.ng\.lua$/i, ""),
             inputs: [], outputs: [], storage: { mode: "linked", path },
         }
         syncNgGroupBoundary(group, raw, { resolveLinked: this.linkedResolver() })
@@ -1259,7 +1252,7 @@ export class ViewNg extends ViewCanvasBase {
     async exportSelectedGroup() {
         const group = this.selectedRawGroup()
         if (!group || this.groupStorageMode(group) !== "inline") return false
-        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Export Group", size: "medium", tag: "view-files", props: { mode: "saver", filter: "*.ng.json,*.json", defaultName: `${group.name || "group"}.ng.json` } }))
+        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Export Group", size: "medium", tag: "view-files", props: { mode: "saver", filter: "*.ng.lua", defaultName: `${group.name || "group"}.ng.lua` } }))
         if (!payload || payload.cancelled) return false
         const path = normalizeNgGroupPath(payload.path)
         if (this.graphPath) {
@@ -1273,6 +1266,7 @@ export class ViewNg extends ViewCanvasBase {
         await this.saveDocumentToPath(path, document)
         const before = this.captureSnapshot()
         this.linkedGraphs.set(path, cloneNgGraphFragment(group.childGraph))
+        this.linkedGraphBaselines.set(path, JSON.stringify(this.linkedGraphs.get(path)))
         const raw = this.activeGraph()
         const index = raw.findIndex((node) => node.id === group.id)
         raw[index] = { ...raw[index], storage: { mode: "linked", path } }
@@ -1313,7 +1307,7 @@ export class ViewNg extends ViewCanvasBase {
     }
 
     async new() {
-        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Create Graph", size: "medium", tag: "view-files", props: { mode: "saver", filter: "*.ng.json,*.json", defaultName: "new-graph.ng.json" } }))
+        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Create Graph", size: "medium", tag: "view-files", props: { mode: "saver", filter: "*.ng.lua", defaultName: "new-graph.ng.lua" } }))
         if (!payload || payload.cancelled) return false
         assert(payload.path, "view-ng new graph requires selected path")
         this.assertRootSavePathAvailable(payload.path)
@@ -1324,7 +1318,7 @@ export class ViewNg extends ViewCanvasBase {
     }
 
     async open() {
-        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Load Graph", size: "medium", tag: "view-files", props: { mode: "chooser", filter: "*.ng.json,*.json" } }))
+        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Load Graph", size: "medium", tag: "view-files", props: { mode: "chooser", filter: "*.ng.lua" } }))
         if (!payload || payload.cancelled) return false
         const selection = payload.selection
         const path = Array.isArray(selection) ? selection[0]?.path : selection?.path
@@ -1350,7 +1344,7 @@ export class ViewNg extends ViewCanvasBase {
     }
 
     async saveAs() {
-        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Save Graph As", size: "medium", tag: "view-files", props: { mode: "saver", filter: "*.ng.json,*.json", defaultName: `${this.graphName || "graph"}.ng.json` } }))
+        const payload = unwrap(await runtime.call("ui.popup.open", { title: "Save Graph As", size: "medium", tag: "view-files", props: { mode: "saver", filter: "*.ng.lua", defaultName: `${this.graphName || "graph"}.ng.lua` } }))
         if (!payload || payload.cancelled) return false
         assert(payload.path, "view-ng save-as requires selected path")
         this.assertRootSavePathAvailable(payload.path)
@@ -1371,16 +1365,50 @@ export class ViewNg extends ViewCanvasBase {
             active.add(path)
             const graph = this.linkedResolver()(path)
             for (const childPath of this.linkedPathsInGraph(graph)) await savePath(childPath)
-            await this.saveDocumentToPath(path, serializeNgGroupGraphDocument(graph))
+            const serialized = JSON.stringify(graph)
+            const baseline = this.linkedGraphBaselines.get(path)
+            assert(typeof baseline === "string", `view-ng missing saved baseline for linked Group ${path}`)
+            if (serialized !== baseline) {
+                const disk = parseNgGroupGraphDocument(await this.readLuaDocument(path))
+                assert(JSON.stringify(disk) === baseline, `Linked Group changed outside the editor: ${path}; reload before saving`)
+                await this.saveDocumentToPath(path, serializeNgGroupGraphDocument(graph))
+                this.linkedGraphBaselines.set(path, serialized)
+            }
             active.delete(path)
             saved.add(path)
         }
         for (const path of this.linkedPathsInGraph(this.rootGraph)) await savePath(path)
     }
 
+    async invokeLua(source, entry, args, sourcePath) {
+        return unwrap(await runtime.invoke("lua/lua::run", source, entry, JSON.stringify(args), sourcePath))
+    }
+
+    async readLuaDocument(path) {
+        const source = unwrap(await runtime.invoke("fs/fs::read-text", path))
+        const json = await this.invokeLua(source, "ng_graph_json", [], path)
+        assert(typeof json === "string", `view-ng ${path} metadata must return a JSON string`)
+        return mapDocumentPaths(JSON.parse(json), path, false)
+    }
+
+    async compileDocument(path, document) {
+        path = projectPath(path)
+        const relativeDocument = mapDocumentPaths(document, path, true)
+        const resultText = await this.invokeLua(NG_COMPILER_SOURCE, "main", [{ graphJson: JSON.stringify(relativeDocument), sourcePath: path }], path)
+        const result = JSON.parse(resultText)
+        assert(result && typeof result === "object", "view-ng compiler must return a result object")
+        if (result.diagnostic !== null) {
+            assert(typeof result.diagnostic === "string", "view-ng compiler diagnostic must be a string")
+            return unfinishedGraphSource(relativeDocument, result.diagnostic)
+        }
+        assert(typeof result.source === "string", "view-ng compiler must return Lua source")
+        return result.source
+    }
+
     async saveDocumentToPath(path, document) {
         assert(typeof path === "string" && path.length > 0, "view-ng save requires path")
-        unwrap(await runtime.invoke("fs/fs::write-text", path, `${JSON.stringify(document, null, 2)}\n`))
+        const source = await this.compileDocument(path, document)
+        unwrap(await runtime.invoke("fs/fs::write-text", path, source))
     }
 
     async saveToPath(path, graph) {
@@ -1390,13 +1418,14 @@ export class ViewNg extends ViewCanvasBase {
     setGraphPath(path) {
         assert(typeof path === "string" && path.length > 0, "view-ng graph path is required")
         this.graphPath = path
-        this.graphName = String(path.split("/").pop() || this.graphName).replace(/\.ng\.json$/i, "").replace(/\.json$/i, "")
+        this.graphName = String(path.split("/").pop() || this.graphName).replace(/\.ng\.lua$/i, "")
         if (this.getAttribute("data-source") !== path) { this._suppressDataSourceReload = true; this.setAttribute("data-source", path); this._suppressDataSourceReload = false }
         this.syncBreadcrumbs()
     }
 
     async loadGraphFS(path, notify = true) {
-        const graph = JSON.parse(unwrap(await runtime.invoke("fs/fs::read-text", path), path))
+        path = projectPath(path)
+        const graph = await this.readLuaDocument(path)
         const root = cloneNgGraph(graph)
         await this.hydrateLinkedGraphs(root)
         this.loadGraph(root)

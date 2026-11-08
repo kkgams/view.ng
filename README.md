@@ -2,29 +2,45 @@
 
 Canvas-based node graph editor for [GAMS](https://github.com/kkgams/gams), distributed as `view.ng.zip`.
 
-| View ID | Source → deployment path | Purpose | Screenshot | License / original work |
-| --- | --- | --- | --- | --- |
-| `view-ng` | `src/views/view-ng.js` → `views/view-ng.js` | Edit, load/save and execute node graphs | Not available | [Apache-2.0](LICENSE), [NOTICE](NOTICE); [kkgams](https://github.com/kkgams) |
+| View ID | Source → deployment path | Purpose | License |
+| --- | --- | --- | --- |
+| `view-ng` | `src/views/view-ng.js` + helpers/compiler → `views/view-ng.js` | Edit, save and execute Lua graph documents | [Apache-2.0](LICENSE), [NOTICE](NOTICE) |
+| `view-ng-node` | `src/views/view-ng-node.js` → `views/view-ng-node.js` | Internal node editor popup | Apache-2.0 |
 
-Register `view-ng` using an explicitly tagged archive URL with `#views/view-ng.js`. Retain LICENSE and NOTICE when installing. Existing releases retain their original asset names.
+Register both Views from the same explicitly tagged archive. Make assembles the graph compiler and document helpers into the graph View module because the Host loads Project Views through blob URLs. Keep LICENSE and NOTICE. Host `/core`, `/util`, `/widgets` and styling remain separately supplied dependencies.
 
-Requires a compatible GAMS Host, `plugin.fs`, `plugin.lua`, the popup/toast/tooltip UI Services, `view.files` and `view.ng-node`. Host `/core`, `/util`, `/widgets` libraries and styling are supplied separately, not bundled.
+## Lua documents
 
-The local Project opens an empty graph without presets. Graph editing and saving use the configured file chooser. Pipeline execution also requires your Project's `ng/compile-graph.lua` and referenced Lua/code assets; this repository does not supply them.
+Save graphs as `.ng.lua`. Each document defines `main(context)` and `ng_graph_json()`, and returns its module exports for `import`. The original editor graph is embedded as JSON; generated execution code is replaced on every save. An unfinished graph remains saveable: its `main()` raises the compilation diagnostic while its metadata remains readable. Legacy JSON documents and inline node scripts are not supported.
+
+Node code modules return a function:
+
+```lua
+return function(inputs, outputs, context)
+    outputs[1] = inputs[1]
+end
+```
+
+Dependencies resolve relative to the importing Lua file, including nested imports. Node implementations and linked Group documents are imported on execution, so their changes are picked up on the next run without regenerating the parent. Inline Groups remain part of the parent. The saved module contains its execution-plan builder, which expands current Group metadata at execution rather than persisting a flattened Group snapshot. Imports are cached within one Lua invocation, not across runs. A changed Group interface can invalidate its parent and raises an error.
+
+The editor displays Project-relative paths; saved documents store paths relative to their own file. Save As preserves dependency destinations. Run saves edited linked Group documents before executing the current root snapshot. Unchanged Groups are not rewritten; conflicting external edits block a save instead of being overwritten. Reload to display external Group changes. External code, Group documents and other required assets must remain available; a graph file is not an asset bundle.
+
+`main()` runs without editor progress reporting. The editor supplies `{pluginId=..., runId=...}` as its optional context; reporting includes node locations. Execution outside the editor still requires a compatible Lua runtime and any APIs used by node code. Opening a Lua document evaluates its top-level code to call `ng_graph_json()`; only open trusted files.
 
 ## Development
 
-Requires Make, Node.js 24+, Python 3 (stdlib), Git, curl, tar, unzip, zip and shasum. No package installation or compilation is needed. Local `gams.json` uses canonical View source and pinned released dependencies, without sibling checkouts.
+Use `nix develop` for the pinned tools. Requires Make, Node.js 24+, Lua 5.4+, Python 3, Git, curl, tar, unzip, zip and shasum. The local Project uses the assembled graph View and canonical node editor source and pinned released UI dependencies, without requiring sibling checkouts or package installation.
+
+The new Lua entry/import API is not available in the old released `plugin.lua` v0.2.0. Supply a built compatible component at ignored `gams_modules/plugin.lua.wasm` before `make open`; no unpublished release URL is assumed and no sibling build is invoked automatically. Other dependencies: `plugin.fs`, the popup/toast/tooltip UI Services, `view.files`, and `view.code`.
 
 | Command | Purpose |
 | --- | --- |
-| `make open` | Check source and open local `gams.json` in the released Host; download only if absent (macOS Apple Silicon) |
-| `make tools/gams.app` | Download the Host and accompanying notices without launching it |
-| `make test` | Check JavaScript syntax and local Project View entry paths; no graph runtime tests |
-| `make package` | Build incremental `build.nosync/view.ng.zip` and `SHA256SUMS` |
-| `make serve-docs` | Preview the pinned wiki; `DOCS_PORT` defaults to 8080 |
-| `make docs` | Build the wiki into `build.nosync/site/` |
-| `make validate-docs` | Validate wiki content |
-| `make clean` | Remove `build.nosync/`, `tools/gams.app`, `tools/gams-release-notices` and downloaded `gams_modules/`; refuse tracked targets or directory symlinks |
+| `make open` | Build/check source and launch local `gams.json`; require the prepared Lua component and download the Host only if absent (macOS Apple Silicon) |
+| `make tools/gams.app` | Download the released Host with its notices, without launching it |
+| `make test` | JavaScript syntax, document path/serialization tests, native Lua graph tests and local View entry checks |
+| `make package` | Incremental `build.nosync/view.ng.zip` and `SHA256SUMS` |
+| `make serve-docs` | Preview pinned wiki; independent `DOCS_PORT` defaults to 8080 |
+| `make docs` / `make validate-docs` | Build / validate documentation |
+| `make clean` | Remove recreatable `build.nosync/`, downloaded Host/notices and `gams_modules/`; refuse tracked targets or directory symlinks |
 
-First launch needs network access. Existing Host downloads are not updated implicitly; macOS security checks remain intact. Build output, temporary downloads and pinned justgook/wiki v1.4.0 stay under ignored `build.nosync/`. Static checks do not establish graph execution, native Host integration or theme rendering.
+Existing downloads are not updated implicitly. Static checks do not establish native Host integration or theme rendering. Existing release assets and tags are unchanged.

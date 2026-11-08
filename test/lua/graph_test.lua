@@ -3,11 +3,12 @@ json=dofile('test/lua/json.lua')
 local env=setmetatable({json=json},{__index=_G})
 assert(loadfile('src/lua/compile-graph.lua','t',env))()
 local modules={}
+local reports={}
 local function importer(path) return assert(modules[path],'missing module '..path) end
 env.import=importer
 local function compile(text)
  local result=env.main({graphJson=text})
- local runtime=setmetatable({json=json,import=importer},{__index=_G})
+ local runtime=setmetatable({json=json,import=importer,host={call=function(target,payload) reports[#reports+1]={target=target,payload=payload} end}},{__index=_G})
  return assert(load(result.source,'@graph.ng.lua','t',runtime))(),result
 end
 local raw='[{"id":1,"kind":4,"name":"value","inputs":[],"outputs":[{"id":1,"name":"n","value":"3"}]},{"id":2,"kind":2,"name":"double","codePath":"double.lua","inputs":[{"id":1,"name":"n","srcNodeId":1,"srcOutputId":1}],"outputs":[{"id":1,"name":"result","value":null}]},{"id":3,"kind":1,"name":"goal","inputs":[{"id":1,"name":"answer","srcNodeId":2,"srcOutputId":1}],"outputs":[]}]'
@@ -16,6 +17,11 @@ local graph,result=compile(raw)
 assert(result.diagnostic==json.null,result.diagnostic)
 assert(graph.ng_graph_json()==raw)
 assert(graph.main().goal.inputs.answer==6)
+assert(#reports==0, 'execution without context must not report')
+assert(graph.main({pluginId='editor',runId='run-1'}).goal.inputs.answer==6)
+assert(#reports>0 and reports[1].target=='editor.nodeStart')
+assert(reports[1].payload.runId=='run-1' and reports[1].payload.location.executionNodeId==reports[1].payload.nodeId)
+assert(type(reports[1].payload.location.groupPath)=='table')
 modules['double.lua']={run=function(inputs,outputs) outputs[1]=inputs.n*4 end}
 assert(graph.main().goal.inputs.answer==12)
 modules['double.lua']=function(_,outputs) outputs.active[1]=false end

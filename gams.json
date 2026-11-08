@@ -2,7 +2,7 @@
   "plugins": [
     "https://github.com/kkgams/plugin.fs/releases/download/v0.2.0/plugin.fs.wasm",
     "https://github.com/kkgams/plugin.layout/releases/download/v0.2.0/plugin.layout.wasm",
-    "https://github.com/kkgams/plugin.lua/releases/download/v0.2.0/plugin.lua.wasm"
+    "gams_modules/plugin.lua.wasm"
   ],
   "ui": {
     "keys": [],
@@ -60,7 +60,7 @@
         "internal": false
       },
       "view-ng-node": {
-        "url": "https://github.com/kkgams/view.ng-node/releases/download/v0.1.0/view.ng-node-0.1.0.zip#views/view-ng-node.js",
+        "url": "src/views/view-ng-node.js",
         "label": "Node editor",
         "internal": true,
         "config": {
@@ -68,7 +68,7 @@
         }
       },
       "view-ng": {
-        "url": "src/views/view-ng.js",
+        "url": "build.nosync/views/view-ng.js",
         "label": "Node graph",
         "group": "Project",
         "internal": false,

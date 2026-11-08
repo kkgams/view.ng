@@ -1,10 +1,11 @@
 .DEFAULT_GOAL := open
 .DELETE_ON_ERROR:
-ZIP_FILES := README.md LICENSE NOTICE src/views/view-ng.js
+ZIP_FILES := README.md LICENSE NOTICE src/views/view-ng-node.js build.nosync/views/view-ng.js
 export TMPDIR := $(abspath build.nosync/tmp)
 export PYTHONPYCACHEPREFIX := $(abspath build.nosync/pycache)
 PYTHON ?= python3
 NODE ?= node
+LUA ?= lua
 CURL ?= curl
 GAMS_RELEASE_API ?= https://api.github.com/repos/kkgams/gams/releases/latest
 UNAME_S := $(shell uname -s)
@@ -17,8 +18,14 @@ WIKI_ENGINE := $(abspath build.nosync/wiki-$(WIKI_VERSION))
 
 .PHONY: open test docs serve-docs validate-docs package clean
 
-test:
-	$(NODE) --check src/views/view-ng.js
+build.nosync/views/view-ng.js: src/views/view-ng.js src/views/ng-document.js src/lua/compile-graph.lua scripts/bundle.py
+	$(PYTHON) -B scripts/bundle.py
+
+test: build.nosync/views/view-ng.js
+	$(NODE) --check build.nosync/views/view-ng.js
+	@for source in src/views/*.js; do $(NODE) --check "$$source" || exit; done
+	LUA="$(LUA)" $(NODE) --test test/*.test.mjs
+	$(LUA) test/lua/graph_test.lua
 	$(PYTHON) -c 'import json,pathlib; c=json.loads(pathlib.Path("gams.json").read_text()); assert all(pathlib.Path(v["url"]).is_file() for v in c["ui"]["views"].values() if not v["url"].startswith("https://"))'
 
 # Retain an existing app; never update it implicitly.
@@ -40,7 +47,11 @@ tools/gams.app: | build.nosync/tmp
 		mv "$$stage/unpacked" tools/gams-release-notices; \
 		mv "$$stage/GAMS.app" "$@"
 
-open: test tools/gams.app
+gams_modules/plugin.lua.wasm:
+	@echo "Install the prepared plugin.lua WASM at $@; released v0.2.0 lacks the required entry/import API." >&2
+	@exit 1
+
+open: test gams_modules/plugin.lua.wasm tools/gams.app
 	GAMS_APP_CWD="$(CURDIR)" GAMS_CONFIG="gams.json" ./tools/gams.app/Contents/MacOS/gams
 
 build.nosync/tmp:
@@ -59,8 +70,9 @@ package: build.nosync/SHA256SUMS build.nosync/view.ng.zip
 
 build.nosync/view.ng.zip: $(ZIP_FILES) Makefile | build.nosync/tmp
 	rm -f "$@"
-	cd src && zip -q -X "../$@" $(patsubst src/%,%,$(filter src/%,$(ZIP_FILES)))
-	zip -q -X "$@" $(filter-out src/%,$(ZIP_FILES))
+	cd build.nosync && zip -q -X "view.ng.zip" views/view-ng.js
+	cd src && zip -q -X "../$@" views/view-ng-node.js
+	zip -q -X "$@" README.md LICENSE NOTICE
 
 build.nosync/SHA256SUMS: build.nosync/view.ng.zip
 	cd build.nosync && shasum -a 256 view.ng.zip > SHA256SUMS
