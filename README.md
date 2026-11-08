@@ -2,12 +2,13 @@
 
 Canvas-based node graph editor for [GAMS](https://github.com/kkgams/gams), distributed as `view.ng.zip`.
 
-| View ID | Source → deployment path | Purpose | License |
+| Item | Source → deployment path | Purpose | License |
 | --- | --- | --- | --- |
 | `view-ng` | `src/views/view-ng.js` + helpers/compiler → `views/view-ng.js` | Edit, save and execute Lua graph documents | [Apache-2.0](LICENSE), [NOTICE](NOTICE) |
 | `view-ng-node` | `src/views/view-ng-node.js` → `views/view-ng-node.js` | Internal node editor popup | Apache-2.0 |
+| Lua node presets | `presets/` → `presets/` | Importable node functions | Apache-2.0 |
 
-Register both Views from the same explicitly tagged archive. Make assembles the graph compiler and document helpers into the graph View module because the Host loads Project Views through blob URLs. Keep LICENSE and NOTICE. Host `/core`, `/util`, `/widgets` and styling remain separately supplied dependencies.
+Register both Views from the same explicitly tagged archive. Project configuration owns the preset menu definitions; local `gams.json` supplies the node names and ports. Make assembles the graph compiler and document helpers into the graph View module because the Host loads Project Views through blob URLs. Keep LICENSE and NOTICE. Host `/core`, `/util`, `/widgets` and styling remain separately supplied dependencies.
 
 ## Lua documents
 

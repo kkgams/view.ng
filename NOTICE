@@ -5,6 +5,7 @@ Bounded engineering inventory (not a perfect ownership/provenance assertion):
 - src/views/view-ng.js
 - src/views/view-ng-node.js (node editor moved from view.ng-node)
 - src/views/ng-document.js
+- presets/ (GAMS demo node modules)
 - src/lua/compile-graph.lua (modified graph evaluator from example.game1)
 
 The node editor originated in the kkgams/view.ng-node repository. Its

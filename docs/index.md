@@ -5,7 +5,7 @@ status: reference
 
 # Node Graph View
 
-Edit `.ng.lua` documents visually and execute them in GAMS. The `view.ng.zip` archive contains `view-ng`, its internal `view-ng-node` popup, with the Lua compiler embedded in the graph View module. Register both View entries from the same tagged archive and retain its other files and notices.
+Edit `.ng.lua` documents visually and execute them in GAMS. The `view.ng.zip` archive contains `view-ng`, its internal `view-ng-node` popup, with the Lua compiler embedded in the graph View module. Register both View entries from the same tagged archive and retain its other files and notices. The archive also includes importable node modules under `presets/`; Project configuration owns their menu definitions, with the supplied names and ports registered in local `gams.json`.
 
 ## Documents and dependencies
 

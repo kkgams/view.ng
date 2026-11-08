@@ -1,6 +1,8 @@
 .DEFAULT_GOAL := open
 .DELETE_ON_ERROR:
-ZIP_FILES := README.md LICENSE NOTICE src/views/view-ng-node.js build.nosync/views/view-ng.js
+PRESET_FILES := $(shell find presets -type f -name '*.lua' | sort)
+PRESET_DIRS := $(shell find presets -type d | sort)
+ZIP_FILES := README.md LICENSE NOTICE src/views/view-ng-node.js build.nosync/views/view-ng.js $(PRESET_FILES)
 export TMPDIR := $(abspath build.nosync/tmp)
 export PYTHONPYCACHEPREFIX := $(abspath build.nosync/pycache)
 PYTHON ?= python3
@@ -26,7 +28,7 @@ test: build.nosync/views/view-ng.js
 	@for source in src/views/*.js; do $(NODE) --input-type=module --check < "$$source" || exit; done
 	LUA="$(LUA)" $(NODE) --test test/*.test.mjs
 	$(LUA) test/lua/graph_test.lua
-	$(LUA) test/lua/presets_test.lua $(shell find presets -type f -name '*.lua' | sort)
+	$(LUA) test/lua/presets_test.lua $(PRESET_FILES)
 	$(PYTHON) -c 'import json,pathlib; c=json.loads(pathlib.Path("gams.json").read_text()); assert all(pathlib.Path(v["url"]).is_file() for v in c["ui"]["views"].values() if not v["url"].startswith("https://"))'
 
 tests: test
@@ -67,11 +69,12 @@ docs serve-docs validate-docs: $(WIKI_MAKEFILE) | build.nosync/tmp
 
 package: build.nosync/SHA256SUMS build.nosync/view.ng.zip
 
-build.nosync/view.ng.zip: $(ZIP_FILES) Makefile | build.nosync/tmp
+# Directory prerequisites also invalidate the archive when presets are removed.
+build.nosync/view.ng.zip: $(ZIP_FILES) $(PRESET_DIRS) Makefile | build.nosync/tmp
 	rm -f "$@"
 	cd build.nosync && zip -q -X "view.ng.zip" views/view-ng.js
 	cd src && zip -q -X "../$@" views/view-ng-node.js
-	zip -q -X "$@" README.md LICENSE NOTICE
+	zip -q -X "$@" README.md LICENSE NOTICE $(PRESET_FILES)
 
 build.nosync/SHA256SUMS: build.nosync/view.ng.zip
 	cd build.nosync && shasum -a 256 view.ng.zip > SHA256SUMS
