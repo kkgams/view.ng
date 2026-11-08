@@ -27,7 +27,7 @@ Calling `main()` without context omits progress reporting. GAMS supplies `{plugi
 
 ## Local development
 
-Make assembles the graph View from its canonical source, document helpers and compiler into `build.nosync/views/view-ng.js`; the Host loads Project Views through blob URLs, so no relative module loading is required. The local Project uses that module and canonical node editor source and pinned released UI dependencies. Supply the prepared Lua component at `gams_modules/plugin.lua.wasm`: the older released plugin lacks the new named-entry/arguments/import contract. No sibling checkout or unpublished release URL is required by the Project configuration.
+Make assembles the graph View from its canonical source, document helpers and compiler into `build.nosync/views/view-ng.js`; the Host loads Project Views through blob URLs, so no relative module loading is required. The local Project uses that module and canonical node editor source and pinned released UI dependencies. The Project pins published `plugin.lua` v0.3.0 for the named-entry/arguments/import API; the Host installs it on launch. No manual component installation or sibling checkout is required.
 
 | Command | Purpose |
 | --- | --- |
@@ -39,4 +39,4 @@ Make assembles the graph View from its canonical source, document helpers and co
 | `make validate-docs` | Validate wiki content |
 | `make clean` | Remove recreatable build output, downloaded Host/notices and installed `gams_modules/`; refuse tracked files and directory symlinks |
 
-Use `nix develop` for the pinned tools. Requires Make, Node.js 24+, Lua 5.4+, Python 3, Git, curl, tar, unzip, zip and shasum. Dependencies include the compatible Host, `plugin.fs`, the prepared `plugin.lua`, popup/toast/tooltip UI Services, `view.files` and `view.code`. Host libraries and styling remain external. Existing downloaded Hosts are preserved, and published assets/tags remain unchanged.
+Use `nix develop` for the pinned tools. Requires Make, Node.js 24+, Lua 5.4+, Python 3, Git, curl, tar, unzip, zip and shasum. Dependencies include the compatible Host, `plugin.fs`, `plugin.lua` v0.3.0, popup/toast/tooltip UI Services, `view.files` and `view.code`. Host libraries and styling remain external. Existing downloaded Hosts are preserved, and published assets/tags remain unchanged.

@@ -49,11 +49,7 @@ tools/gams.app: | build.nosync/tmp
 		mv "$$stage/unpacked" tools/gams-release-notices; \
 		mv "$$stage/GAMS.app" "$@"
 
-gams_modules/plugin.lua.wasm:
-	@echo "Install the prepared plugin.lua WASM at $@; released v0.2.0 lacks the required entry/import API." >&2
-	@exit 1
-
-open: build.nosync/views/view-ng.js gams_modules/plugin.lua.wasm tools/gams.app
+open: build.nosync/views/view-ng.js tools/gams.app
 	GAMS_APP_CWD="$(CURDIR)" GAMS_CONFIG="gams.json" ./tools/gams.app/Contents/MacOS/gams
 
 build.nosync/tmp:

@@ -31,11 +31,11 @@ The editor displays Project-relative paths; saved documents store paths relative
 
 Use `nix develop` for the pinned tools. Requires Make, Node.js 24+, Lua 5.4+, Python 3, Git, curl, tar, unzip, zip and shasum. The local Project uses the assembled graph View and canonical node editor source and pinned released UI dependencies, without requiring sibling checkouts or package installation.
 
-The new Lua entry/import API is not available in the old released `plugin.lua` v0.2.0. Supply a built compatible component at ignored `gams_modules/plugin.lua.wasm` before `make open`; no unpublished release URL is assumed and no sibling build is invoked automatically. Other dependencies: `plugin.fs`, the popup/toast/tooltip UI Services, `view.files`, and `view.code`.
+The local Project pins `plugin.lua` v0.3.0 for the named-entry/arguments/import API; the Host installs the published component on launch. No manual component installation or sibling build is required. Other dependencies: `plugin.fs`, the popup/toast/tooltip UI Services, `view.files`, and `view.code`.
 
 | Command | Purpose |
 | --- | --- |
-| `make open` | Build the View without tests and launch local `gams.json`; require the prepared Lua component and download the Host only if absent (macOS Apple Silicon) |
+| `make open` | Build the View without tests and launch local `gams.json`; install pinned dependencies and download the Host only if absent (macOS Apple Silicon) |
 | `make tools/gams.app` | Download the released Host with its notices, without launching it |
 | `make test` / `make tests` | JavaScript syntax, document path/serialization tests, native Lua graph tests and local View entry checks |
 | `make package` | Incremental `build.nosync/view.ng.zip` and `SHA256SUMS` |
