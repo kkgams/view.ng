@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local condition = inputs[1]
 local value = inputs[2]
 
@@ -30,3 +31,4 @@ outputs[1] = value
 outputs[2] = value
 outputs.active[1] = active
 outputs.active[2] = not active
+end

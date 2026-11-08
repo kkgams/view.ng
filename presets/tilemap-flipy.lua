@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false
@@ -98,4 +99,5 @@ if type(tilemap) == "table" and isArray(tilemap) then
 	outputs[1] = results
 else
 	outputs[1] = flip_tilemap_y(tilemap, "tilemap input")
+end
 end

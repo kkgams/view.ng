@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Extract Tileset Tiles
 -- Builds a compact, near-square tileset from selected global, 1-based tile IDs.
 -- Source tilesets occupy consecutive global ID ranges in input order.
@@ -140,3 +141,4 @@ for outputIndex = 1, requestedCount do
 end
 
 outputs[1] = output
+end

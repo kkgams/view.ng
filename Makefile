@@ -26,6 +26,7 @@ test: build.nosync/views/view-ng.js
 	@for source in src/views/*.js; do $(NODE) --input-type=module --check < "$$source" || exit; done
 	LUA="$(LUA)" $(NODE) --test test/*.test.mjs
 	$(LUA) test/lua/graph_test.lua
+	$(LUA) test/lua/presets_test.lua $(shell find presets -type f -name '*.lua' | sort)
 	$(PYTHON) -c 'import json,pathlib; c=json.loads(pathlib.Path("gams.json").read_text()); assert all(pathlib.Path(v["url"]).is_file() for v in c["ui"]["views"].values() if not v["url"].startswith("https://"))'
 
 tests: test

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Unique Values
 -- Recursively removes duplicate values from every nested dense array.
 -- Array order and the first occurrence of each value are preserved.
@@ -80,3 +81,4 @@ if not inputs.active[1] then
 end
 
 outputs[1] = unique_array(inputs[1], "values")
+end

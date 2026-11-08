@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Tilemap to Collision Segments
 -- Converts one tilemap layer into merged exterior collision edge segments.
 -- Inputs: map or array of maps, layerIndex, solidTileId, oneWayTileId (optional)
@@ -266,4 +267,5 @@ if type(tilemap) == "table" and isArray(tilemap) then
 	outputs[1] = segmentLists
 else
 	outputs[1] = generateSegments(tilemap, layerInput, solidTileInput, oneWayTileInput, "map input")
+end
 end

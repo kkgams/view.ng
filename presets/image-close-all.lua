@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local value = inputs[1]
 if value == nil then value = "" end
 
@@ -20,3 +21,4 @@ end
 outputs[1] = value
 outputs[2] = tostring(response.closed or 0)
 outputs[3] = ""
+end

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Remap Values
 -- Recursively replaces primitive values throughout an array or object.
 -- Object keys are preserved. Values absent from originalIDs are unchanged.
@@ -92,3 +93,4 @@ local function remap(node)
 end
 
 outputs[1] = remap(value)
+end

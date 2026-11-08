@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Array At
 -- Returns the item at an index in a dense array.
 -- Positive indexes are one-based; negative indexes count backward from the end.
@@ -46,4 +47,5 @@ if resolvedIndex < 1 or resolvedIndex > length then
 	outputs.active[1] = false
 else
 	outputs[1] = array[resolvedIndex]
+end
 end

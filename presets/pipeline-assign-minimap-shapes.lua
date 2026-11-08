@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Assign Minimap Shapes - Pipeline Step
 -- Reads a tree JSON file, assigns random readable minimap masks to each node,
 -- and writes the updated tree JSON.
@@ -56,3 +57,4 @@ for index, node in ipairs(tree) do
 end
 
 outputs[1] = tree
+end

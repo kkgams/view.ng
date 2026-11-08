@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Tilemap Flatten
 -- Flattens selected tilemap layers into one layer.
 --
@@ -223,4 +224,5 @@ else
 	end
 	outputs[1] = results
 	outputs[2] = statsList
+end
 end

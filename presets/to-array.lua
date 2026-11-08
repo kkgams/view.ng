@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local inputIds = {}
 for key, _ in pairs(inputs.active) do
 	if type(key) == "number" then
@@ -19,3 +20,4 @@ for _, inputId in ipairs(inputIds) do
 end
 
 outputs[1] = result
+end

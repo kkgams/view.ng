@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false, 0
@@ -59,4 +60,5 @@ else
 	local data, err = readJson(path)
 	outputs[1] = data
 	outputs[2] = err
+end
 end

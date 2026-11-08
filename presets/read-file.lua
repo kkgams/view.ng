@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false, 0
@@ -58,4 +59,5 @@ else
 	local content, err = readFile(path)
 	outputs[1] = content
 	outputs[2] = err
+end
 end

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false
@@ -39,4 +40,5 @@ if type(image) == "table" and isArray(image) then
 	outputs[1] = transformed
 else
 	outputs[1] = flipImage(image, "image input")
+end
 end

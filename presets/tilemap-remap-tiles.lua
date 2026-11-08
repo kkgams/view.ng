@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Tilemap Remap Tiles
 -- Remaps tile ids in one tilemap layer.
 --
@@ -215,4 +216,5 @@ else
 	end
 	outputs[1] = results
 	outputs[2] = statsList
+end
 end

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false
@@ -165,3 +166,4 @@ outputs[1] = allLayers
 
 -- Optional but recommended for the next pipeline stage.
 outputs[2] = usedTileIDsBySize
+end

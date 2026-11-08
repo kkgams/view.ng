@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local value = inputs[1]
 if value == nil then
     error("value is required")
@@ -27,3 +28,4 @@ local function scale_numbers(current, path)
 end
 
 outputs[1] = scale_numbers(value, "value")
+end

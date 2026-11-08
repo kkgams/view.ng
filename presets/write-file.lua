@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false, 0
@@ -78,4 +79,5 @@ if type(path) == "table" then
 	outputs[1] = written
 else
 	outputs[1] = writeFile(path, content)
+end
 end

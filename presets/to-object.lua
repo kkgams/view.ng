@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- toObject
 -- Builds an object from all active named inputs.
 --
@@ -33,3 +34,4 @@ for _, inputId in ipairs(inputIds) do
 end
 
 outputs[1] = object
+end

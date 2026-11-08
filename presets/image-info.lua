@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Image Info
 -- Returns image metadata while preserving any nested array structure.
 
@@ -61,3 +62,4 @@ local function collectInfo(value, label)
 end
 
 outputs[1] = collectInfo(inputs[1], "image")
+end

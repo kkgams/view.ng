@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- World Tree Generator - Pipeline Step 1
 -- Calls treegen plugin to generate procedural tree
 -- Inputs: nodeCount, maxDepth, maxBranching, rootBranches, src
@@ -48,3 +49,4 @@ end
 
 outputs[1] = tree -- Return the tree
 outputs[2] = "" -- No error
+end

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false
@@ -36,4 +37,5 @@ if type(path) == "table" then
 	outputs[1] = items
 else
 	outputs[1] = json.decode(inputs[1])
+end
 end

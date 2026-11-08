@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Tilemap Find Tile Positions
 -- Finds every occurrence of one tile id in one tilemap layer.
 -- Inputs: map or array of maps, layerIndex, tileId
@@ -122,4 +123,5 @@ if type(tilemap) == "table" and is_array(tilemap) then
 	outputs[1] = position_lists
 else
 	outputs[1] = find_positions(tilemap, layer_input, tile_input, "map input")
+end
 end

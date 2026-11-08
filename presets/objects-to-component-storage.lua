@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Objects to Component Storage
 -- Projects World Object properties into ECS component storage while preserving each
 -- object's zero-based source index as its entity id.
@@ -149,3 +150,4 @@ for object_index = 1, object_count do
 end
 
 outputs[1] = storage
+end

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Pick
 -- Selects a subset of fields from one decoded Lua object/table or from each object in a decoded Lua array.
 --
@@ -102,3 +103,4 @@ if is_array_table(items) then
 end
 
 outputs[1] = pick_fields(items, fields, "Item")
+end

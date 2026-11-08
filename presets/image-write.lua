@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false
@@ -94,4 +95,5 @@ if type(image) == "table" and imagesAreArray then
 	outputs[1] = paths
 else
 	outputs[1] = saveImage(image, path, format, "image input")
+end
 end

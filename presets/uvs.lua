@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local uvs = {}
 for i = 0, 32 * 32 - 1 do
 	local x = i % 32
@@ -11,3 +12,4 @@ for i = 0, 32 * 32 - 1 do
 end
 
 outputs[1] = uvs
+end

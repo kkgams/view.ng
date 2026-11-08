@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local paths = inputs[1]
 
 local function isArray(value)
@@ -43,3 +44,4 @@ end
 -- Keep BulletML files as raw JSON to preserve empty object `{}` shape across encoding.
 outputs[1] = "[[" .. table.concat(patterns, ",") .. "]]"
 outputs[2] = ""
+end

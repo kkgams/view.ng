@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Find
 -- Returns the first item in a dense array that matches a filter.
 -- Filters may be recursive partial objects, one test string, or an AND-array of test strings.
@@ -185,3 +186,4 @@ for index = 1, count do
 end
 
 outputs.active[1] = false
+end

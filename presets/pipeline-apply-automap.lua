@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Apply Automap Rules - Pipeline Step 5
 -- Reads rule/input tilemaps, calls the pure automap component, and writes output.
 -- Inputs: rulesMap, inputMap, outputMap
@@ -76,3 +77,4 @@ end
 result =
 	host.call("automap/automap::apply", tilemap_to_wit(rulesMap), tilemap_to_wit(inputMap), tilemap_to_wit(outputMap))
 outputs[1] = tilemap_from_wit(result)
+end

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local schemaJson = inputs[1]
 if schemaJson == nil or schemaJson == "" then
     outputs[1] = ""
@@ -118,3 +119,4 @@ end
 
 outputs[1] = outputFile
 outputs[2] = ""
+end

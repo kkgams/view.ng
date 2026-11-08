@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false
@@ -275,4 +276,5 @@ else
 	outputs[1] = rects
 	outputs[2] = images
 	outputs[3] = info
+end
 end

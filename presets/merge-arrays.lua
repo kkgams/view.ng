@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local inputIds = {}
 for key, isActive in pairs(inputs.active) do
 	if type(key) == "number" and isActive then
@@ -57,3 +58,4 @@ else
 end
 
 outputs[1] = result
+end

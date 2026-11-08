@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Create Minimap - Pipeline Step 4
 -- Calls minimap.comp to generate tilemap visualization from tree
 -- Inputs: tree, map, direction (legacy/ignored)
@@ -71,3 +72,4 @@ if not okGen then
 end
 
 outputs[1] = tileMapFromWit(witTileMap)
+end

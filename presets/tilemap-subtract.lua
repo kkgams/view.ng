@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local tilemap = inputs[1]
 local diff = tonumber(inputs[2])
 
@@ -32,3 +33,4 @@ for layer_index, layer in ipairs(layers) do
 end
 
 outputs[1] = tilemap
+end

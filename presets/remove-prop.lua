@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Remove Prop
 -- Removes values at arbitrary paths from one decoded value.
 -- Inputs: value, path
@@ -143,3 +144,4 @@ for _, path in ipairs(normalizePathList(pathValue, "path")) do
 end
 
 outputs[1] = result
+end

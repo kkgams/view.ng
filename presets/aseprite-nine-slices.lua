@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false
@@ -291,3 +292,4 @@ outputs[3] = {
 	files = infos,
 	count = #rects,
 }
+end

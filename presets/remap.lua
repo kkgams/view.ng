@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local itemsJson = inputs[1]
 if itemsJson == nil or itemsJson == "" then itemsJson = "[]" end
 
@@ -106,3 +107,4 @@ end
 
 outputs[1] = json.encode(remapped)
 outputs[2] = ""
+end

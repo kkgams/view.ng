@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local tilemap = inputs[1]
 if tilemap == nil or tilemap == "" then
 	error("tilemap input is required")
@@ -105,3 +106,4 @@ for _, tileId in ipairs(tileIds) do
 end
 
 outputs[1] = rooms
+end

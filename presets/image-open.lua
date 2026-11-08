@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Image Open
 -- Opens image paths while preserving any nested array structure.
 
@@ -68,3 +69,4 @@ local function open(value, label)
 end
 
 outputs[1] = open(inputs[1], "path")
+end

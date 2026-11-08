@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Tilemap Scaler
 -- Reads a tilemap, calls the pure scaler component, and writes the scaled tilemap.
 -- Inputs: inputMap, outputMap, scaleFactor
@@ -97,3 +98,4 @@ opt["door-sizes"] = {
 local scaleResult = host.call("scaler/scaler::scale", tilemap_to_wit(inputMap), opt)
 
 outputs[1] = tilemap_from_wit(scaleResult)
+end

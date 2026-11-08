@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local schema = inputs[1]
 local slots = inputs[2]
 local path_bin = inputs[3]
@@ -74,3 +75,4 @@ else
 end
 ensureParentDirs(path_bin)
 host.call("respack/respack::build-to-file", schema, slots_json, path_bin)
+end

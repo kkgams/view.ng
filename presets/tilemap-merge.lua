@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local rooms = inputs[1]
 if rooms == nil or rooms == "" then
 	error("rooms input is required")
@@ -121,3 +122,4 @@ for roomIndex, room in ipairs(rooms) do
 end
 
 outputs[1] = result
+end

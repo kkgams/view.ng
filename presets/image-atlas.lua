@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Image Atlas
 -- Builds one atlas from matching trees of rects and image resources.
 
@@ -124,3 +125,4 @@ if blitted == nil then
 end
 
 outputs[1] = blitted
+end

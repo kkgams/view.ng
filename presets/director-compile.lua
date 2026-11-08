@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local source = inputs[1]
 if type(source) ~= "string" then
 	error("Director Compile source must be a string")
@@ -12,3 +13,4 @@ end
 ir.symbols = nil
 outputs[1] = ir
 outputs[2] = symbols
+end

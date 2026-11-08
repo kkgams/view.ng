@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Tilemap to AABBs
 -- Converts selected tiles from one tilemap layer into an exact rectangle cover.
 -- Inputs: map or array of maps, layerIndex, tileId
@@ -166,4 +167,5 @@ if type(tilemap) == "table" and isArray(tilemap) then
 	outputs[1] = aabbLists
 else
 	outputs[1] = generateAabbs(tilemap, layerInput, tileInput, "map input")
+end
 end

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false
@@ -84,4 +85,5 @@ else
 	end
 	outputs[1] = tostring(tonumber(response.closed) or 1)
 	outputs[2] = ""
+end
 end

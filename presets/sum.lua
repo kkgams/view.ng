@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Sum
 -- Adds two numeric inputs.
 
@@ -12,3 +13,4 @@ if right == nil then
 end
 
 outputs[1] = left + right
+end

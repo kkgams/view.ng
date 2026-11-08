@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Generate a simple MarkovJunior maze into a tilemap layer.
 -- Inputs: tilemap, layer, seed, maxSteps, wallTile, floorTile, modelIrPath
 -- Outputs: tilemap, grid, stats
@@ -226,3 +227,4 @@ outputs[3] = {
 	changed = grid.changed,
 	done = grid.done,
 }
+end

@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Int Array
 -- Creates a fixed-length integer arithmetic sequence.
 -- value[index] = start + (index - 1) * increment
@@ -42,3 +43,4 @@ for index = 1, length do
 end
 
 outputs[1] = result
+end

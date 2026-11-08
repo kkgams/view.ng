@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- fromObject
 -- Extracts properties from an object or an array of objects.
 --
@@ -106,4 +107,5 @@ for _, outputId in ipairs(outputIds) do
 	else
 		outputs[outputId] = itemValue
 	end
+end
 end

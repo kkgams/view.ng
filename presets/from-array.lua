@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local array = inputs[1]
 if not inputs.active[1] then
 	error("array is not connected")
@@ -39,4 +40,5 @@ for outputIndex, outputId in ipairs(outputIds) do
 	else
 		outputs.active[outputId] = false
 	end
+end
 end

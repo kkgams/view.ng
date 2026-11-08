@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Add Fields
 -- Adds one amount to selected direct fields on an object or every object in an array.
 -- Returns a deep copy and does not mutate the input value.
@@ -107,3 +108,4 @@ for index = 1, item_count do
 	result[index] = add_to_object(value[index], "value item '" .. tostring(index) .. "'")
 end
 outputs[1] = result
+end

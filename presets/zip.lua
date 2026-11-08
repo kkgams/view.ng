@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Zip
 -- Merges already-decoded Lua objects by index.
 --
@@ -122,3 +123,4 @@ for index = 1, output_count do
 end
 
 outputs[1] = result
+end

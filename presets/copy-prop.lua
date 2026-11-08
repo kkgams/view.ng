@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Copy Prop
 -- Copies values from one decoded Lua value/path to another decoded Lua value/path.
 --
@@ -200,3 +201,4 @@ for index, from_path in ipairs(from_paths) do
 end
 
 outputs[1] = result
+end

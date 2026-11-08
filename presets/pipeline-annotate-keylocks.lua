@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Keylock Progression Annotator
 --
 -- Enriches the generated world tree with lock/key progression metadata before the
@@ -354,3 +355,4 @@ for pairIndex = 1, lockCount do
 end
 
 outputs[1] = tree
+end

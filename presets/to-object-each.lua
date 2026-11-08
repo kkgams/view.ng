@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- toObjectEach
 -- Builds an array of objects from active named array inputs.
 --
@@ -83,3 +84,4 @@ for index = 1, expectedCount do
 end
 
 outputs[1] = objects
+end

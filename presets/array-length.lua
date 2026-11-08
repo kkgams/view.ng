@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Array Length
 -- Returns the number of items in a dense one-based array.
 
@@ -27,3 +28,4 @@ for index = 1, length do
 end
 
 outputs[1] = length
+end

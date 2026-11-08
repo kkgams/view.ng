@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Apply a MarkovJunior model to a tilemap layer using direct 1:1 ids.
 --
 -- Contract:
@@ -272,4 +273,5 @@ else
 	outputs[1] = results
 	outputs[2] = grids
 	outputs[3] = statsList
+end
 end

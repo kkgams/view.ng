@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 local function isArray(value)
 	if type(value) ~= "table" then
 		return false, 0
@@ -188,3 +189,4 @@ end
 
 table.sort(paths)
 outputs[1] = paths
+end

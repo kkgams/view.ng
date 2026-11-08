@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- Room Item Placer
 --
 -- Appends free-form item entries to rooms in the generated world tree.
@@ -168,3 +169,4 @@ for itemIndex = 1, itemCount do
 end
 
 outputs[1] = tree
+end

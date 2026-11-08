@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 -- LUT Generator
 -- Converts arrays of integers into RGBA LUT images.
 -- Nested arrays are preserved; widths must have the same nested structure,
@@ -105,3 +106,4 @@ local function convert(values, widths, label)
 end
 
 outputs[1] = convert(inputs[1], inputs[2], "input")
+end

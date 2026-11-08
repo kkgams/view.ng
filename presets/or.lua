@@ -1,3 +1,4 @@
+return function(inputs, outputs, context)
 if inputs.active[1] then
     outputs[1] = inputs[1]
 elseif inputs.active[2] then
@@ -5,4 +6,5 @@ elseif inputs.active[2] then
 else
     outputs[1] = nil
     outputs.active[1] = false
+end
 end
