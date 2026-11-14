@@ -5,7 +5,22 @@ status: reference
 
 # Node Graph View
 
-Edit `.ng.lua` documents visually and execute them in GAMS. The `view.ng.zip` archive contains `view-ng`, its internal `view-ng-node` popup, with the Lua compiler embedded in the graph View module. Register both View entries from the same tagged archive and retain its other files and notices. The archive also includes importable node modules under `presets/`; Project configuration owns their menu definitions, with the supplied names and ports registered in local `gams.json`.
+Edit `.ng.lua` documents visually and execute them in GAMS. The `view.ng.zip` archive contains `view-ng`, its internal `view-ng-node` popup, with the Lua compiler embedded in the graph View module. Register both View entries from the same tagged archive and retain its other files and notices. The archive also includes importable node modules under `presets/` and their names, groups and ports in `presets.json`. Local `gams.json` references this catalog.
+
+## Include the preset catalog
+
+Extract `presets.json` and the complete `presets/` directory from the archive
+into your Project root. Set `ui.views.view-ng-node.config.presets` in `gams.json`:
+
+```json
+{ "$ref": "presets.json#/presets" }
+```
+
+Use a Host with local `$ref` support. All 68 definitions are included; their Lua
+paths remain Project-relative, so preserve the extracted directory structure.
+No HTTP or ZIP reference resolution is needed. Domain-specific nodes still need
+their corresponding plugins and Project data. Project Save flattens references
+into the active config without modifying `presets.json`.
 
 ## Documents and dependencies
 

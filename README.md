@@ -7,8 +7,25 @@ Canvas-based node graph editor for [GAMS](https://github.com/kkgams/gams), distr
 | `view-ng` | `src/views/view-ng.js` + helpers/compiler → `views/view-ng.js` | Edit, save and execute Lua graph documents | [Apache-2.0](LICENSE), [NOTICE](NOTICE) |
 | `view-ng-node` | `src/views/view-ng-node.js` → `views/view-ng-node.js` | Internal node editor popup | Apache-2.0 |
 | Lua node presets | `presets/` → `presets/` | Importable node functions | Apache-2.0 |
+| Preset catalog | `presets.json` → `presets.json` | Node names, groups and ports | Apache-2.0 |
 
-Register both Views from the same explicitly tagged archive. Project configuration owns the preset menu definitions; local `gams.json` supplies the node names and ports. Make assembles the graph compiler and document helpers into the graph View module because the Host loads Project Views through blob URLs. Keep LICENSE and NOTICE. Host `/core`, `/util`, `/widgets` and styling remain separately supplied dependencies.
+Register both Views from the same explicitly tagged archive. Local `gams.json` references the supplied `presets.json` catalog. Make assembles the graph compiler and document helpers into the graph View module because the Host loads Project Views through blob URLs. Keep LICENSE and NOTICE. Host `/core`, `/util`, `/widgets` and styling remain separately supplied dependencies.
+
+## Including the presets
+
+Extract `presets.json` and the complete `presets/` directory from `view.ng.zip`
+into your Project root, preserving paths. In `gams.json`, set
+`ui.views.view-ng-node.config.presets` to:
+
+```json
+{ "$ref": "presets.json#/presets" }
+```
+
+Requires a Host with local `$ref` support. This imports all 68 preset definitions;
+Lua files remain Project-relative under `presets/`. No HTTP or ZIP `$ref` loading
+is required. Some nodes also require their corresponding domain plugins and
+Project data; the catalog does not install those dependencies. Project Save
+flattens references into `gams.json`, leaving the catalog unchanged.
 
 ## Lua documents
 

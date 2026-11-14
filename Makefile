@@ -2,7 +2,7 @@
 .DELETE_ON_ERROR:
 PRESET_FILES := $(shell find presets -type f -name '*.lua' | sort)
 PRESET_DIRS := $(shell find presets -type d | sort)
-ZIP_FILES := README.md LICENSE NOTICE src/views/view-ng-node.js build.nosync/views/view-ng.js $(PRESET_FILES)
+ZIP_FILES := README.md LICENSE NOTICE presets.json src/views/view-ng-node.js build.nosync/views/view-ng.js $(PRESET_FILES)
 export TMPDIR := $(abspath build.nosync/tmp)
 export PYTHONPYCACHEPREFIX := $(abspath build.nosync/pycache)
 PYTHON ?= python3
@@ -74,7 +74,7 @@ build.nosync/view.ng.zip: $(ZIP_FILES) $(PRESET_DIRS) Makefile | build.nosync/tm
 	rm -f "$@"
 	cd build.nosync && zip -q -X "view.ng.zip" views/view-ng.js
 	cd src && zip -q -X "../$@" views/view-ng-node.js
-	zip -q -X "$@" README.md LICENSE NOTICE $(PRESET_FILES)
+	zip -q -X "$@" README.md LICENSE NOTICE presets.json $(PRESET_FILES)
 
 build.nosync/SHA256SUMS: build.nosync/view.ng.zip
 	cd build.nosync && shasum -a 256 view.ng.zip > SHA256SUMS
