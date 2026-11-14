@@ -37,7 +37,7 @@ tests: test
 tools/gams.app: | build.nosync/tmp
 	@test "$(UNAME_S)" = Darwin && test "$(UNAME_M)" = arm64 || \
 		{ echo 'GAMS release download requires macOS Apple Silicon' >&2; exit 1; }
-	@test ! -e tools/gams-release-notices || \
+	@test ! -e tools/gams-release-notices && test ! -L tools/gams-release-notices || \
 		{ echo 'tools/gams-release-notices already exists; move it aside before reinstalling GAMS' >&2; exit 1; }
 	@mkdir -p tools
 	@set -eu; stage=$$(mktemp -d "$(TMPDIR)/gams-download.XXXXXX"); \
@@ -49,6 +49,8 @@ tools/gams.app: | build.nosync/tmp
 		test -f "$$stage/unpacked/GAMS.app/Contents/Info.plist"; \
 		test -x "$$stage/unpacked/GAMS.app/Contents/MacOS/gams"; \
 		mv "$$stage/unpacked/GAMS.app" "$$stage/GAMS.app"; \
+		test ! -e "$$stage/unpacked/.gams-managed" && test ! -L "$$stage/unpacked/.gams-managed"; \
+		printf '%s\n' 'view.ng Makefile Host download' > "$$stage/unpacked/.gams-managed"; \
 		mv "$$stage/unpacked" tools/gams-release-notices; \
 		mv "$$stage/GAMS.app" "$@"
 
