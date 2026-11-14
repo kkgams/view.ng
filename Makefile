@@ -29,7 +29,7 @@ test: build.nosync/views/view-ng.js
 	LUA="$(LUA)" $(NODE) --test test/*.test.mjs
 	$(LUA) test/lua/graph_test.lua
 	$(LUA) test/lua/presets_test.lua $(PRESET_FILES)
-	$(PYTHON) -c 'import json,pathlib; c=json.loads(pathlib.Path("gams.json").read_text()); assert all(pathlib.Path(v["url"]).is_file() for v in c["ui"]["views"].values() if not v["url"].startswith("https://"))'
+	$(PYTHON) -c 'import json,pathlib; c=json.loads(pathlib.Path("gams.json").read_text()); assert all(pathlib.Path(v["url"]).is_file() for v in c["ui"]["views"].values() if isinstance(v["url"], str))'
 
 tests: test
 
