@@ -16,10 +16,14 @@ into your Project root. Set `ui.views.view-ng-node.config.presets` in `gams.json
 { "$ref": "presets.json#/presets" }
 ```
 
-Use a Host with local `$ref` support. All 68 definitions are included; their Lua
-paths remain Project-relative, so preserve the extracted directory structure.
-No HTTP or ZIP reference resolution is needed. Domain-specific nodes still need
-their corresponding plugins and Project data. Project Save flattens references
+Use a Host with `$ref` and `$file` support. All 68 definitions are included.
+Catalog `codePath` values use `{ "$file": "presets/…lua" }`; the Host resolves
+each path relative to the catalog, locally or inside a remote ZIP. The Unit
+still receives ordinary Project-relative string paths, not `$file` objects. Extraction as shown above
+still works when the directory structure is preserved. An older downloaded
+Host may not support this syntax; existing downloads are not updated implicitly.
+Domain-specific nodes still need their corresponding plugins and Project data.
+Project Save preserves unchanged references; edited preset definitions are written
 into the active config without modifying `presets.json`.
 
 ## Documents and dependencies

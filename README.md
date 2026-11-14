@@ -21,11 +21,16 @@ into your Project root, preserving paths. In `gams.json`, set
 { "$ref": "presets.json#/presets" }
 ```
 
-Requires a Host with local `$ref` support. This imports all 68 preset definitions;
-Lua files remain Project-relative under `presets/`. No HTTP or ZIP `$ref` loading
-is required. Some nodes also require their corresponding domain plugins and
-Project data; the catalog does not install those dependencies. Project Save
-flattens references into `gams.json`, leaving the catalog unchanged.
+Requires a Host with `$ref` and `$file` support. This imports all 68 preset
+definitions. Each catalog `codePath` uses `{ "$file": "presets/…lua" }`: the Host
+resolves that path relative to the catalog, whether local or inside a remote ZIP,
+and passes an ordinary Project-relative string path to the Unit. The extraction setup above still works
+when the directory structure is preserved. An older downloaded Host may not
+support this syntax; existing downloads are not updated implicitly. Some nodes
+also require their corresponding domain plugins and Project data; the catalog
+does not install those dependencies. Project Save preserves unchanged references;
+edited preset definitions are written into `gams.json`, leaving the catalog
+unchanged.
 
 ## Lua documents
 

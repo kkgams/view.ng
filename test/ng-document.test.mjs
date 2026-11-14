@@ -48,3 +48,12 @@ test("unfinished Lua documents retain exact graph metadata and fail only on exec
     assert.equal(result.status, 0, result.stderr || result.error?.message)
     assert.deepEqual(JSON.parse(result.stdout), graph)
 })
+
+test("Host-resolved preset paths save and reopen as ordinary Project files", () => {
+    for (const codePath of ["presets/json_encode.lua", "gams_modules/archive/content/presets/json_encode.lua"]) {
+        const graph = [{ kind: 2, codePath }]
+        const saved = mapDocumentPaths(graph, "graphs/example.ng.lua", true)
+        assert.equal(saved[0].codePath, `../${codePath}`)
+        assert.deepEqual(mapDocumentPaths(saved, "graphs/example.ng.lua", false), graph)
+    }
+})

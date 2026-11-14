@@ -3,7 +3,7 @@
     {
       "name": "JSON.Encode",
       "kind": "code",
-      "codePath": "presets/json_encode.lua",
+      "codePath": { "$file": "presets/json_encode.lua" },
       "inputs": [
         {
           "name": "data",
@@ -20,7 +20,7 @@
     {
       "name": "JSON.Decode",
       "kind": "code",
-      "codePath": "presets/json_decode.lua",
+      "codePath": { "$file": "presets/json_decode.lua" },
       "inputs": [
         {
           "name": "text",
@@ -37,7 +37,7 @@
     {
       "name": "Director Compile",
       "kind": "code",
-      "codePath": "presets/director-compile.lua",
+      "codePath": { "$file": "presets/director-compile.lua" },
       "inputs": [
         {
           "name": "source",
@@ -57,7 +57,7 @@
     {
       "name": "toArray",
       "kind": "code",
-      "codePath": "presets/to-array.lua",
+      "codePath": { "$file": "presets/to-array.lua" },
       "inputs": [
         {
           "name": "item1",
@@ -78,7 +78,7 @@
     {
       "name": "fromArray",
       "kind": "code",
-      "codePath": "presets/from-array.lua",
+      "codePath": { "$file": "presets/from-array.lua" },
       "inputs": [
         {
           "name": "array",
@@ -98,7 +98,7 @@
     {
       "name": "Array At",
       "kind": "code",
-      "codePath": "presets/array-at.lua",
+      "codePath": { "$file": "presets/array-at.lua" },
       "inputs": [
         {
           "name": "array"
@@ -118,7 +118,7 @@
     {
       "name": "Array Length",
       "kind": "code",
-      "codePath": "presets/array-length.lua",
+      "codePath": { "$file": "presets/array-length.lua" },
       "inputs": [
         {
           "name": "array"
@@ -134,7 +134,7 @@
     {
       "name": "Int Array",
       "kind": "code",
-      "codePath": "presets/int-array.lua",
+      "codePath": { "$file": "presets/int-array.lua" },
       "inputs": [
         {
           "name": "length"
@@ -158,7 +158,7 @@
     {
       "name": "Filter",
       "kind": "code",
-      "codePath": "presets/filter.lua",
+      "codePath": { "$file": "presets/filter.lua" },
       "inputs": [
         {
           "name": "items"
@@ -177,7 +177,7 @@
     {
       "name": "Find",
       "kind": "code",
-      "codePath": "presets/find.lua",
+      "codePath": { "$file": "presets/find.lua" },
       "inputs": [
         {
           "name": "items"
@@ -196,7 +196,7 @@
     {
       "name": "toObject",
       "kind": "code",
-      "codePath": "presets/to-object.lua",
+      "codePath": { "$file": "presets/to-object.lua" },
       "inputs": [
         {
           "name": "field1",
@@ -217,7 +217,7 @@
     {
       "name": "toObjectEach",
       "kind": "code",
-      "codePath": "presets/to-object-each.lua",
+      "codePath": { "$file": "presets/to-object-each.lua" },
       "inputs": [
         {
           "name": "field1",
@@ -238,7 +238,7 @@
     {
       "name": "fromObject",
       "kind": "code",
-      "codePath": "presets/from-object.lua",
+      "codePath": { "$file": "presets/from-object.lua" },
       "inputs": [
         {
           "name": "object",
@@ -258,7 +258,7 @@
     {
       "name": "Objects to Component Storage",
       "kind": "code",
-      "codePath": "presets/objects-to-component-storage.lua",
+      "codePath": { "$file": "presets/objects-to-component-storage.lua" },
       "inputs": [
         {
           "name": "objects"
@@ -282,7 +282,7 @@
     {
       "name": "mergeArrays",
       "kind": "code",
-      "codePath": "presets/merge-arrays.lua",
+      "codePath": { "$file": "presets/merge-arrays.lua" },
       "inputs": [
         {
           "name": "array1",
@@ -303,7 +303,7 @@
     {
       "name": "Unique Values",
       "kind": "code",
-      "codePath": "presets/unique-values.lua",
+      "codePath": { "$file": "presets/unique-values.lua" },
       "inputs": [
         {
           "name": "values",
@@ -320,7 +320,7 @@
     {
       "name": "Remap Values",
       "kind": "code",
-      "codePath": "presets/remap-values.lua",
+      "codePath": { "$file": "presets/remap-values.lua" },
       "inputs": [
         {
           "name": "value"
@@ -344,7 +344,7 @@
     {
       "name": "IF",
       "kind": "code",
-      "codePath": "presets/if.lua",
+      "codePath": { "$file": "presets/if.lua" },
       "inputs": [
         {
           "name": "condition",
@@ -368,7 +368,7 @@
     {
       "name": "OR",
       "kind": "code",
-      "codePath": "presets/or.lua",
+      "codePath": { "$file": "presets/or.lua" },
       "inputs": [
         {
           "name": "a",
@@ -389,7 +389,7 @@
     {
       "name": "Copy Prop",
       "kind": "code",
-      "codePath": "presets/copy-prop.lua",
+      "codePath": { "$file": "presets/copy-prop.lua" },
       "inputs": [
         {
           "name": "from",
@@ -418,7 +418,7 @@
     {
       "name": "Remove Prop",
       "kind": "code",
-      "codePath": "presets/remove-prop.lua",
+      "codePath": { "$file": "presets/remove-prop.lua" },
       "inputs": [
         {
           "name": "value",
@@ -439,7 +439,7 @@
     {
       "name": "Minimap Shape Assigner",
       "kind": "code",
-      "codePath": "presets/pipeline-assign-minimap-shapes.lua",
+      "codePath": { "$file": "presets/pipeline-assign-minimap-shapes.lua" },
       "inputs": [
         {
           "name": "tree",
@@ -456,7 +456,7 @@
     {
       "name": "Keylock Progression Annotator",
       "kind": "code",
-      "codePath": "presets/pipeline-annotate-keylocks.lua",
+      "codePath": { "$file": "presets/pipeline-annotate-keylocks.lua" },
       "inputs": [
         {
           "name": "tree",
@@ -481,7 +481,7 @@
     {
       "name": "Room Item Placer",
       "kind": "code",
-      "codePath": "presets/pipeline-place-room-items.lua",
+      "codePath": { "$file": "presets/pipeline-place-room-items.lua" },
       "inputs": [
         {
           "name": "tree",
@@ -506,7 +506,7 @@
     {
       "name": "UVs",
       "kind": "code",
-      "codePath": "presets/uvs.lua",
+      "codePath": { "$file": "presets/uvs.lua" },
       "outputs": [
         {
           "name": "uvs"
@@ -517,7 +517,7 @@
     {
       "name": "Info",
       "kind": "code",
-      "codePath": "presets/image-info.lua",
+      "codePath": { "$file": "presets/image-info.lua" },
       "inputs": [
         {
           "name": "images",
@@ -534,7 +534,7 @@
     {
       "name": "Atlas",
       "kind": "code",
-      "codePath": "presets/image-atlas.lua",
+      "codePath": { "$file": "presets/image-atlas.lua" },
       "inputs": [
         {
           "name": "rects"
@@ -559,7 +559,7 @@
     {
       "name": "Extract Tileset Tiles",
       "kind": "code",
-      "codePath": "presets/tileset-extract-tiles.lua",
+      "codePath": { "$file": "presets/tileset-extract-tiles.lua" },
       "inputs": [
         {
           "name": "tilesets"
@@ -583,7 +583,7 @@
     {
       "name": "FlipY",
       "kind": "code",
-      "codePath": "presets/image-flipy.lua",
+      "codePath": { "$file": "presets/image-flipy.lua" },
       "inputs": [
         {
           "name": "image"
@@ -599,7 +599,7 @@
     {
       "name": "Open",
       "kind": "code",
-      "codePath": "presets/image-open.lua",
+      "codePath": { "$file": "presets/image-open.lua" },
       "inputs": [
         {
           "name": "path",
@@ -616,7 +616,7 @@
     {
       "name": "Close",
       "kind": "code",
-      "codePath": "presets/image-close.lua",
+      "codePath": { "$file": "presets/image-close.lua" },
       "inputs": [
         {
           "name": "images",
@@ -636,7 +636,7 @@
     {
       "name": "Close All",
       "kind": "code",
-      "codePath": "presets/image-close-all.lua",
+      "codePath": { "$file": "presets/image-close-all.lua" },
       "inputs": [
         {
           "name": "value",
@@ -659,7 +659,7 @@
     {
       "name": "Base64 Decode",
       "kind": "code",
-      "codePath": "presets/image-decode.lua",
+      "codePath": { "$file": "presets/image-decode.lua" },
       "inputs": [
         {
           "name": "base64",
@@ -676,7 +676,7 @@
     {
       "name": "Base64 Encode",
       "kind": "code",
-      "codePath": "presets/image-encode.lua",
+      "codePath": { "$file": "presets/image-encode.lua" },
       "inputs": [
         {
           "name": "image"
@@ -692,7 +692,7 @@
     {
       "name": "Aseprite Animations",
       "kind": "code",
-      "codePath": "presets/aseprite-animation.lua",
+      "codePath": { "$file": "presets/aseprite-animation.lua" },
       "inputs": [
         {
           "name": "path",
@@ -719,7 +719,7 @@
     {
       "name": "Aseprite Nine Slices",
       "kind": "code",
-      "codePath": "presets/aseprite-nine-slices.lua",
+      "codePath": { "$file": "presets/aseprite-nine-slices.lua" },
       "inputs": [
         {
           "name": "path",
@@ -750,7 +750,7 @@
     {
       "name": "Write",
       "kind": "code",
-      "codePath": "presets/image-write.lua",
+      "codePath": { "$file": "presets/image-write.lua" },
       "inputs": [
         {
           "name": "image",
@@ -775,7 +775,7 @@
     {
       "name": "LUT Generator",
       "kind": "code",
-      "codePath": "presets/lut-generator.lua",
+      "codePath": { "$file": "presets/lut-generator.lua" },
       "inputs": [
         {
           "name": "values"
@@ -794,7 +794,7 @@
     {
       "name": "Unique Tiles",
       "kind": "code",
-      "codePath": "presets/tilemap-unique.lua",
+      "codePath": { "$file": "presets/tilemap-unique.lua" },
       "inputs": [
         {
           "name": "tilemap"
@@ -813,7 +813,7 @@
     {
       "name": "Reduce Tile index",
       "kind": "code",
-      "codePath": "presets/tilemap-subtract.lua",
+      "codePath": { "$file": "presets/tilemap-subtract.lua" },
       "inputs": [
         {
           "name": "tilemap"
@@ -832,7 +832,7 @@
     {
       "name": "Tilemap Remap Tiles",
       "kind": "code",
-      "codePath": "presets/tilemap-remap-tiles.lua",
+      "codePath": { "$file": "presets/tilemap-remap-tiles.lua" },
       "inputs": [
         {
           "name": "tilemap"
@@ -862,7 +862,7 @@
     {
       "name": "Flatten Tilemap",
       "kind": "code",
-      "codePath": "presets/tilemap-flatten.lua",
+      "codePath": { "$file": "presets/tilemap-flatten.lua" },
       "inputs": [
         {
           "name": "tilemap"
@@ -889,7 +889,7 @@
     {
       "name": "Split Tilemap",
       "kind": "code",
-      "codePath": "presets/tilemap-split.lua",
+      "codePath": { "$file": "presets/tilemap-split.lua" },
       "inputs": [
         {
           "name": "tilemap"
@@ -909,7 +909,7 @@
     {
       "name": "Merge Tilemaps",
       "kind": "code",
-      "codePath": "presets/tilemap-merge.lua",
+      "codePath": { "$file": "presets/tilemap-merge.lua" },
       "inputs": [
         {
           "name": "tilemaps"
@@ -925,7 +925,7 @@
     {
       "name": "Tilemap Find Tile Positions",
       "kind": "code",
-      "codePath": "presets/tilemap-find-tile-positions.lua",
+      "codePath": { "$file": "presets/tilemap-find-tile-positions.lua" },
       "inputs": [
         {
           "name": "map",
@@ -950,7 +950,7 @@
     {
       "name": "Tilemap to Collision Segments",
       "kind": "code",
-      "codePath": "presets/collision/tilemap-to-segments.lua",
+      "codePath": { "$file": "presets/collision/tilemap-to-segments.lua" },
       "inputs": [
         {
           "name": "map",
@@ -979,7 +979,7 @@
     {
       "name": "Tilemap to AABBs",
       "kind": "code",
-      "codePath": "presets/collision/tilemap-to-aabbs.lua",
+      "codePath": { "$file": "presets/collision/tilemap-to-aabbs.lua" },
       "inputs": [
         {
           "name": "map",
@@ -1004,7 +1004,7 @@
     {
       "name": "Pack Rects",
       "kind": "code",
-      "codePath": "presets/pack-rects.lua",
+      "codePath": { "$file": "presets/pack-rects.lua" },
       "inputs": [
         {
           "name": "rects",
@@ -1046,7 +1046,7 @@
     {
       "name": "Pick",
       "kind": "code",
-      "codePath": "presets/pick.lua",
+      "codePath": { "$file": "presets/pick.lua" },
       "inputs": [
         {
           "name": "items",
@@ -1067,7 +1067,7 @@
     {
       "name": "Glob",
       "kind": "code",
-      "codePath": "presets/glob.lua",
+      "codePath": { "$file": "presets/glob.lua" },
       "inputs": [
         {
           "name": "pattern",
@@ -1084,7 +1084,7 @@
     {
       "name": "Read File",
       "kind": "code",
-      "codePath": "presets/read-file.lua",
+      "codePath": { "$file": "presets/read-file.lua" },
       "inputs": [
         {
           "name": "path",
@@ -1104,7 +1104,7 @@
     {
       "name": "Read JSON",
       "kind": "code",
-      "codePath": "presets/read-json.lua",
+      "codePath": { "$file": "presets/read-json.lua" },
       "inputs": [
         {
           "name": "path",
@@ -1124,7 +1124,7 @@
     {
       "name": "Write File",
       "kind": "code",
-      "codePath": "presets/write-file.lua",
+      "codePath": { "$file": "presets/write-file.lua" },
       "inputs": [
         {
           "name": "path",
@@ -1145,7 +1145,7 @@
     {
       "name": "Remap",
       "kind": "code",
-      "codePath": "presets/remap.lua",
+      "codePath": { "$file": "presets/remap.lua" },
       "inputs": [
         {
           "name": "items",
@@ -1185,7 +1185,7 @@
     {
       "name": "Add Fields",
       "kind": "code",
-      "codePath": "presets/add-fields.lua",
+      "codePath": { "$file": "presets/add-fields.lua" },
       "inputs": [
         {
           "name": "value"
@@ -1207,7 +1207,7 @@
     {
       "name": "Sum",
       "kind": "code",
-      "codePath": "presets/sum.lua",
+      "codePath": { "$file": "presets/sum.lua" },
       "inputs": [
         {
           "name": "left"
@@ -1226,7 +1226,7 @@
     {
       "name": "Scale",
       "kind": "code",
-      "codePath": "presets/scale.lua",
+      "codePath": { "$file": "presets/scale.lua" },
       "inputs": [
         {
           "name": "value"
@@ -1246,7 +1246,7 @@
     {
       "name": "Respack Save",
       "kind": "code",
-      "codePath": "presets/respack-save.lua",
+      "codePath": { "$file": "presets/respack-save.lua" },
       "inputs": [
         {
           "name": "schema"
@@ -1267,7 +1267,7 @@
     {
       "name": "Build",
       "kind": "code",
-      "codePath": "presets/respack-build.lua",
+      "codePath": { "$file": "presets/respack-build.lua" },
       "inputs": [
         {
           "name": "schema",
@@ -1295,7 +1295,7 @@
     {
       "name": "Generate Odin",
       "kind": "code",
-      "codePath": "presets/respack-generate-odin.lua",
+      "codePath": { "$file": "presets/respack-generate-odin.lua" },
       "inputs": [
         {
           "name": "schema",
@@ -1322,7 +1322,7 @@
     {
       "name": "Automap",
       "kind": "code",
-      "codePath": "presets/pipeline-apply-automap.lua",
+      "codePath": { "$file": "presets/pipeline-apply-automap.lua" },
       "inputs": [
         {
           "name": "rulesMap",
@@ -1347,7 +1347,7 @@
     {
       "name": "Minimap Generator",
       "kind": "code",
-      "codePath": "presets/pipeline-create-minimap.lua",
+      "codePath": { "$file": "presets/pipeline-create-minimap.lua" },
       "inputs": [
         {
           "name": "tree",
@@ -1364,7 +1364,7 @@
     {
       "name": "Scaler",
       "kind": "code",
-      "codePath": "presets/pipeline-tilemap-scaler.lua",
+      "codePath": { "$file": "presets/pipeline-tilemap-scaler.lua" },
       "inputs": [
         {
           "name": "inputMap",
@@ -1421,7 +1421,7 @@
     {
       "name": "tilemap FlipY",
       "kind": "code",
-      "codePath": "presets/tilemap-flipy.lua",
+      "codePath": { "$file": "presets/tilemap-flipy.lua" },
       "inputs": [
         {
           "name": "tilemap"
@@ -1437,7 +1437,7 @@
     {
       "name": "Tilemap Markov Maze",
       "kind": "code",
-      "codePath": "presets/tilemap-markov-maze.lua",
+      "codePath": { "$file": "presets/tilemap-markov-maze.lua" },
       "inputs": [
         {
           "name": "tilemap"
@@ -1483,7 +1483,7 @@
     {
       "name": "Tilemap Markov Apply",
       "kind": "code",
-      "codePath": "presets/tilemap-markov-apply.lua",
+      "codePath": { "$file": "presets/tilemap-markov-apply.lua" },
       "inputs": [
         {
           "name": "tilemap"
@@ -1521,7 +1521,7 @@
     {
       "name": "World Tree Generator",
       "kind": "code",
-      "codePath": "presets/pipeline-world-tree.lua",
+      "codePath": { "$file": "presets/pipeline-world-tree.lua" },
       "inputs": [
         {
           "name": "nodeCount",
@@ -1550,7 +1550,7 @@
     {
       "name": "Zip",
       "kind": "code",
-      "codePath": "presets/zip.lua",
+      "codePath": { "$file": "presets/zip.lua" },
       "inputs": [
         {
           "name": "items1",
