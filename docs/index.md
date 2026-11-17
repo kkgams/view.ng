@@ -56,6 +56,6 @@ Make assembles the graph View from its canonical source, document helpers and co
 | `make serve-docs` | Preview docs, independent `DOCS_PORT=8080` |
 | `make docs` | Build docs under `build.nosync/site/` |
 | `make validate-docs` | Validate wiki content |
-| `make clean` | Remove `build.nosync/`, marked Host/notices and configured completed Unit caches; preserve supplied/unrelated files; refuse unidentified targets, tracked files or symlinks |
+| `make clean` | Remove all of `build.nosync/`, `tools/` and `gams_modules/`, without ownership markers; refuse tracked files or symlinks in deletion paths before deleting anything. |
 
 Use `nix develop` for the pinned tools. Requires Make, Node.js 24+, Lua 5.4+, Python 3, Git, curl, tar, unzip, zip and shasum. Dependencies include the compatible Host, `plugin.fs`, `plugin.lua` v0.3.0, popup/toast/tooltip UI Services, `view.files` and `view.code`. Host libraries and styling remain external. Existing downloaded Hosts are preserved, and published assets/tags remain unchanged.

@@ -64,6 +64,6 @@ The local Project pins `plugin.lua` v0.3.0 for the named-entry/arguments/import 
 | `make package` | Incremental `build.nosync/view.ng.zip` and `SHA256SUMS` |
 | `make serve-docs` | Preview pinned wiki; independent `DOCS_PORT` defaults to 8080 |
 | `make docs` / `make validate-docs` | Build / validate documentation |
-| `make clean` | Remove `build.nosync/`, marked Host/notices and configured completed Unit caches; preserve supplied/unrelated files; refuse unidentified targets, tracked files or symlinks |
+| `make clean` | Remove all of `build.nosync/`, `tools/` and `gams_modules/`, without ownership markers; refuse tracked files or symlinks in deletion paths before deleting anything. |
 
 Existing downloads are not updated implicitly. Static checks do not establish native Host integration or theme rendering. Existing release assets and tags are unchanged.
