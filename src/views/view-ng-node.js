@@ -1,5 +1,5 @@
 import { runtime, unwrap } from "/core/runtime.js"
-import { normalizeNgPresetDraft, ngPresetKind } from "/util/ng-node-preset.js"
+import { ngPresetKind, normalizeNgPresetDraft } from "/util/ng-node-preset.js"
 import { registerViewPlugin, unregisterViewPlugin } from "/util/view-plugin.js"
 
 const NG = {
@@ -71,7 +71,13 @@ function kindFromFormValue(value, fallback = NG.NODE_CODE) {
 }
 
 function nodeSupportsInputs(kind) {
-    return kind === NG.NODE_CODE || kind === NG.NODE_GOAL || kind === NG.NODE_GRAPH_OUTPUT || kind === NG.NODE_FOR_EACH_GET_VAR || kind === NG.NODE_FOR_EACH_SET_VAR
+    return (
+        kind === NG.NODE_CODE ||
+        kind === NG.NODE_GOAL ||
+        kind === NG.NODE_GRAPH_OUTPUT ||
+        kind === NG.NODE_FOR_EACH_GET_VAR ||
+        kind === NG.NODE_FOR_EACH_SET_VAR
+    )
 }
 
 function nodeSupportsOutputs(kind) {
@@ -83,12 +89,14 @@ function createNodeDraft(kind = NG.NODE_CODE) {
         kind,
         templateName: "",
         name: "",
-        ...(kind === NG.NODE_CODE ? {
-            codePath: "",
-            code: "",
-            codeReadOnly: true,
-            codeStatus: "Choose a code file to edit.",
-        } : {}),
+        ...(kind === NG.NODE_CODE
+            ? {
+                  codePath: "",
+                  code: "",
+                  codeReadOnly: true,
+                  codeStatus: "Choose a code file to edit.",
+              }
+            : {}),
         newInputName: "",
         newOutputName: "",
         newOutputValue: "",
@@ -153,8 +161,7 @@ export class ViewNgNode extends HTMLElement {
                 draft.code = String(this.popupProps?.code || "")
                 draft.codeReadOnly = Boolean(this.popupProps?.codeReadOnly ?? !draft.codePath)
                 draft.codeStatus = String(
-                    this.popupProps?.codeStatus ||
-                        (!draft.codePath ? "Choose a code file to edit." : ""),
+                    this.popupProps?.codeStatus || (!draft.codePath ? "Choose a code file to edit." : ""),
                 )
             }
             return draft
@@ -206,7 +213,17 @@ export class ViewNgNode extends HTMLElement {
                 const ownerKind = Number(this.popupProps.childGraphOwnerKind || 0)
                 if (kind === NG.NODE_GRAPH_INPUT && ownerKind !== NG.NODE_GROUP) return null
                 if (kind === NG.NODE_GRAPH_OUTPUT && ![NG.NODE_GROUP, NG.NODE_FOR_EACH].includes(ownerKind)) return null
-                if ([NG.NODE_FOR_EACH_INPUT, NG.NODE_FOR_EACH_SHARED_INPUT, NG.NODE_FOR_EACH_GET_VAR, NG.NODE_FOR_EACH_SET_VAR, NG.NODE_ITERATION_CONTROL].includes(kind) && ownerKind !== NG.NODE_FOR_EACH) return null
+                if (
+                    [
+                        NG.NODE_FOR_EACH_INPUT,
+                        NG.NODE_FOR_EACH_SHARED_INPUT,
+                        NG.NODE_FOR_EACH_GET_VAR,
+                        NG.NODE_FOR_EACH_SET_VAR,
+                        NG.NODE_ITERATION_CONTROL,
+                    ].includes(kind) &&
+                    ownerKind !== NG.NODE_FOR_EACH
+                )
+                    return null
                 if (kind === NG.NODE_GOAL && this.popupProps.insideForEach) return null
                 const group = String(entry?.group || "Presets").trim() || "Presets"
                 return {
@@ -233,7 +250,11 @@ export class ViewNgNode extends HTMLElement {
         }
         if (this.draft.kind === NG.NODE_FOR_EACH_INPUT) {
             this.draft.inputs = []
-            this.draft.outputs = ["Item", "Index", "Array"].map((name, index) => ({ outputId: index + 1, name, value: "" }))
+            this.draft.outputs = ["Item", "Index", "Array"].map((name, index) => ({
+                outputId: index + 1,
+                name,
+                value: "",
+            }))
             return
         }
         if (this.draft.kind === NG.NODE_FOR_EACH_SHARED_INPUT) {
@@ -244,7 +265,9 @@ export class ViewNgNode extends HTMLElement {
         if (this.draft.kind === NG.NODE_FOR_EACH_GET_VAR) {
             this.draft.inputs = Array.isArray(this.draft.inputs) ? this.draft.inputs : []
             this.draft.outputs = this.draft.inputs.map((input, index) => ({
-                outputId: Number(input.inputId || index + 1), name: String(input.name || "").trim(), value: "",
+                outputId: Number(input.inputId || index + 1),
+                name: String(input.name || "").trim(),
+                value: "",
             }))
             return
         }
@@ -368,7 +391,7 @@ export class ViewNgNode extends HTMLElement {
                   : isValueNode
                     ? `<input type="hidden" name="output-port-id" value="${Number(port.outputId || index + 1)}"><input type="text" name="output-port-value" data-port-id="${Number(port.outputId || index + 1)}" value="${escapeAttribute(port.value || "")}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Value ${index + 1}">`
                     : `<input type="hidden" name="output-port-id" value="${Number(port.outputId || index + 1)}"><input type="text" name="output-port-name" data-port-id="${Number(port.outputId || index + 1)}" value="${escapeAttribute(port.name || "")}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Output ${index + 1}">`
-}
+          }
         </td>
         <td><button type="button" data-action="${isInput ? "remove-input" : "remove-output"}" data-port-id="${Number(isInput ? port.inputId : port.outputId || index + 1)}" aria-label="Delete"><i aria-hidden="true">delete</i></button></td>
       </tr>
@@ -412,7 +435,7 @@ export class ViewNgNode extends HTMLElement {
         </table>
       </fieldset>`
               : ""
-}
+      }
       ${
           nodeSupportsOutputs(this.draft.kind) && this.draft.kind !== NG.NODE_GRAPH_INPUT
               ? `
@@ -430,7 +453,7 @@ export class ViewNgNode extends HTMLElement {
         </table>
       </fieldset>`
               : ""
-}
+      }
       <footer>
         <output data-element="status"></output>
         <button type="button" data-action="cancel">Cancel</button>
@@ -575,9 +598,10 @@ export class ViewNgNode extends HTMLElement {
         }
 
         this.draft.inputs = nextInputs
-        this.draft.outputs = this.draft.kind === NG.NODE_FOR_EACH_GET_VAR
-            ? nextInputs.map((input) => ({ outputId: input.inputId, name: input.name, value: "" }))
-            : nextOutputs
+        this.draft.outputs =
+            this.draft.kind === NG.NODE_FOR_EACH_GET_VAR
+                ? nextInputs.map((input) => ({ outputId: input.inputId, name: input.name, value: "" }))
+                : nextOutputs
     }
 
     addInputPort(name) {
@@ -833,12 +857,20 @@ export class ViewNgNode extends HTMLElement {
                     draft: {
                         kind: Number(this.draft.kind || NG.NODE_CODE),
                         name: String(this.draft.name || "").trim(),
-                        ...(this.draft.kind === NG.NODE_CODE ? {
-                            codePath: String(this.draft.codePath || "").trim(),
-                            code: String(this.draft.code || ""),
-                        } : {}),
-                        ...(this.draft.kind === NG.NODE_GROUP ? { storage: structuredClone(this.draft.storage || { mode: "inline" }) } : {}),
-                        childGraph: this.draft.kind === NG.NODE_FOR_EACH || (this.draft.kind === NG.NODE_GROUP && (this.draft.storage?.mode || "inline") === "inline") ? structuredClone(this.draft.childGraph || []) : undefined,
+                        ...(this.draft.kind === NG.NODE_CODE
+                            ? {
+                                  codePath: String(this.draft.codePath || "").trim(),
+                                  code: String(this.draft.code || ""),
+                              }
+                            : {}),
+                        ...(this.draft.kind === NG.NODE_GROUP
+                            ? { storage: structuredClone(this.draft.storage || { mode: "inline" }) }
+                            : {}),
+                        childGraph:
+                            this.draft.kind === NG.NODE_FOR_EACH ||
+                            (this.draft.kind === NG.NODE_GROUP && (this.draft.storage?.mode || "inline") === "inline")
+                                ? structuredClone(this.draft.childGraph || [])
+                                : undefined,
                         inputs: this.draft.inputs.map((port, index) => ({
                             inputId: Number(port.inputId || index + 1),
                             name: String(port.name || "").trim(),
@@ -864,12 +896,20 @@ export class ViewNgNode extends HTMLElement {
                     kind: Number(this.draft.kind || NG.NODE_CODE),
                     templateName: String(this.draft.templateName || ""),
                     name: String(this.draft.name || "").trim(),
-                    ...(this.draft.kind === NG.NODE_CODE ? {
-                        codePath: String(this.draft.codePath || "").trim(),
-                        code: String(this.draft.code || ""),
-                    } : {}),
-                    ...(this.draft.kind === NG.NODE_GROUP ? { storage: structuredClone(this.draft.storage || { mode: "inline" }) } : {}),
-                    childGraph: this.draft.kind === NG.NODE_FOR_EACH || (this.draft.kind === NG.NODE_GROUP && (this.draft.storage?.mode || "inline") === "inline") ? structuredClone(this.draft.childGraph || []) : undefined,
+                    ...(this.draft.kind === NG.NODE_CODE
+                        ? {
+                              codePath: String(this.draft.codePath || "").trim(),
+                              code: String(this.draft.code || ""),
+                          }
+                        : {}),
+                    ...(this.draft.kind === NG.NODE_GROUP
+                        ? { storage: structuredClone(this.draft.storage || { mode: "inline" }) }
+                        : {}),
+                    childGraph:
+                        this.draft.kind === NG.NODE_FOR_EACH ||
+                        (this.draft.kind === NG.NODE_GROUP && (this.draft.storage?.mode || "inline") === "inline")
+                            ? structuredClone(this.draft.childGraph || [])
+                            : undefined,
                     inputs: this.draft.inputs.map((port, index) => ({
                         inputId: Number(port.inputId || index + 1),
                         name: String(port.name || "").trim(),

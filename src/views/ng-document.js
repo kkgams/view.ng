@@ -5,7 +5,10 @@ function assertDocument(condition, message) {
 
 export function projectPath(path) {
     assertDocument(typeof path === "string" && path.length > 0, "Graph path is required")
-    assertDocument(!path.startsWith("/") && !/^[A-Za-z]:/.test(path) && !path.includes("\\") && !path.includes("\0"), `Invalid Project path: ${path}`)
+    assertDocument(
+        !path.startsWith("/") && !/^[A-Za-z]:/.test(path) && !path.includes("\\") && !path.includes("\0"),
+        `Invalid Project path: ${path}`,
+    )
     const parts = []
     for (const part of path.split("/")) {
         if (!part || part === ".") continue
@@ -19,7 +22,13 @@ export function projectPath(path) {
 }
 
 export function resolveModulePath(documentPath, dependency) {
-    assertDocument(typeof dependency === "string" && dependency.length > 0 && !dependency.startsWith("/") && !/^[A-Za-z]:/.test(dependency), "Import must be a relative file path")
+    assertDocument(
+        typeof dependency === "string" &&
+            dependency.length > 0 &&
+            !dependency.startsWith("/") &&
+            !/^[A-Za-z]:/.test(dependency),
+        "Import must be a relative file path",
+    )
     const directory = projectPath(documentPath).split("/").slice(0, -1)
     return projectPath([...directory, dependency].join("/"))
 }
@@ -27,7 +36,10 @@ export function resolveModulePath(documentPath, dependency) {
 export function relativeModulePath(documentPath, dependency) {
     const from = projectPath(documentPath).split("/").slice(0, -1)
     const to = projectPath(dependency).split("/")
-    while (from.length && to.length && from[0] === to[0]) { from.shift(); to.shift() }
+    while (from.length && to.length && from[0] === to[0]) {
+        from.shift()
+        to.shift()
+    }
     return [...from.map(() => ".."), ...to].join("/")
 }
 
@@ -39,7 +51,8 @@ export function mapDocumentPaths(document, documentPath, toRelative) {
     const visit = (level) => {
         for (const node of level) {
             if (node.kind === 2 && node.codePath) node.codePath = convert(documentPath, node.codePath)
-            if (node.kind === 3 && node.storage?.mode === "linked") node.storage.path = convert(documentPath, node.storage.path)
+            if (node.kind === 3 && node.storage?.mode === "linked")
+                node.storage.path = convert(documentPath, node.storage.path)
             else if (Array.isArray(node.childGraph)) visit(node.childGraph)
         }
     }
@@ -48,7 +61,7 @@ export function mapDocumentPaths(document, documentPath, toRelative) {
 }
 
 export function luaStringLiteral(value) {
-    return '"' + [...new TextEncoder().encode(String(value))].map((byte) => `\\${String(byte).padStart(3, "0")}`).join("") + '"'
+    return `"${[...new TextEncoder().encode(String(value))].map((byte) => `\\${String(byte).padStart(3, "0")}`).join("")}"`
 }
 
 export function unfinishedGraphSource(document, diagnostic) {
