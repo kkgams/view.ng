@@ -13,8 +13,6 @@ import {
     normalizeNgGroupPath,
     parseNgGroupGraphDocument,
     serializeNgGroupGraphDocument,
-    ngInputPortId,
-    ngOutputPortId,
     serializeNgNodeGraph,
     syncNgForEachBoundary,
     syncNgGroupBoundary,
@@ -557,7 +555,7 @@ export class ViewNg extends ViewCanvasBase {
     }
 
     nextNodeId() {
-        const { graph, documentPath } = this.activeLocation()
+        const { documentPath } = this.activeLocation()
         const authoritative = documentPath ? this.linkedResolver()(documentPath) : this.rootGraph
         return nextNgNodeId(authoritative)
     }
