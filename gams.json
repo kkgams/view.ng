@@ -7,7 +7,7 @@
       "$file": "https://github.com/kkgams/plugin.layout/releases/download/v0.2.3/plugin.layout.wasm"
     },
     {
-      "$file": "https://github.com/kkgams/plugin.lua/releases/download/v0.3.0/plugin.lua.wasm"
+      "$file": "https://github.com/kkgams/plugin.lua/releases/download/v0.3.1/plugin.lua.wasm"
     }
   ],
   "ui": {

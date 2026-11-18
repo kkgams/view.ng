@@ -54,7 +54,7 @@ The editor displays Project-relative paths; saved documents store paths relative
 
 Use `nix develop` for the pinned tools. Requires Make, Node.js 24+, Lua 5.4+, Python 3, Git, curl, tar, unzip, zip and shasum. The local Project uses the assembled graph View and canonical node editor source and pinned released UI dependencies, without requiring sibling checkouts or package installation.
 
-The local Project pins `plugin.lua` v0.3.0 for the named-entry/arguments/import API; the Host installs the published component on launch. No manual component installation or sibling build is required. Other dependencies: `plugin.fs`, the popup/toast/tooltip UI Services, `view.files`, and `view.code`.
+The local Project pins `plugin.lua` v0.3.1 for the named-entry/arguments/import API; the Host installs the published component on launch. No manual component installation or sibling build is required. Other dependencies: `plugin.fs`, the popup/toast/tooltip UI Services, `view.files`, and `view.code`.
 
 | Command | Purpose |
 | --- | --- |
