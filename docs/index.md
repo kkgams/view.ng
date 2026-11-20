@@ -7,6 +7,8 @@ status: reference
 
 Edit `.ng.lua` documents visually and execute them in GAMS. The `view.ng.zip` archive contains `view-ng`, its internal `view-ng-node` popup, with the Lua compiler embedded in the graph View module. Register both View entries from the same tagged archive and retain its other files and notices. The archive also includes importable node modules under `presets/` and their names, groups and ports in `presets.json`. Local `gams.json` references this catalog.
 
+[Launch fresh Nodegraph demo](https://gams.z0.lv/app.html?showcase=https%3A%2F%2Fgithub.com%2Fkkgams%2Fshowcases%2Freleases%2Fdownload%2Fv0.2.0%2Fnodegraph.zip). Run the graph, change the node count in Settings, and inspect `tree-output.json` in Files.
+
 ## Include the preset catalog
 
 Extract `presets.json` and the complete `presets/` directory from the archive
